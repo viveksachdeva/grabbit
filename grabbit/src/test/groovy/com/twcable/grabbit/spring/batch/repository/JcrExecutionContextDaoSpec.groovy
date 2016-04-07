@@ -21,15 +21,14 @@ import org.apache.sling.api.resource.ResourceResolverFactory
 import org.springframework.batch.core.JobExecution
 import org.springframework.batch.core.StepExecution
 import org.springframework.batch.core.repository.ExecutionContextSerializer
+import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Subject
 
 import static com.twcable.grabbit.spring.batch.repository.JcrExecutionContextDao.EXECUTION_CONTEXT
 import static com.twcable.grabbit.spring.batch.repository.JcrExecutionContextDao.EXECUTION_ID
-import static com.twcable.jackalope.JCRBuilder.node
-import static com.twcable.jackalope.JCRBuilder.property
-import static com.twcable.jackalope.JCRBuilder.repository
+import static com.twcable.jackalope.JCRBuilder.*
 
 @Subject(JcrExecutionContextDao)
 class JcrExecutionContextDaoSpec extends Specification {
@@ -102,6 +101,26 @@ class JcrExecutionContextDaoSpec extends Specification {
         result.containsKey("deserialized")
     }
 
+    @Ignore('TODO: Implement this test when Jackalope implements resourceResolver.findResources() API')
+    def "GetJobExecutionContextPaths for JobExecutionPaths"() {
+        when:
+        final executionContextDao = new JcrExecutionContextDao(mockFactory, stubSerializer)
+        final result = executionContextDao.getJobExecutionContextPaths([])
+
+        then:
+        1 == 1
+    }
+
+    @Ignore('TODO: Implement this test when Jackalope implements resourceResolver.findResources() API')
+    def "GetStepExecutionContextPaths for JobExecutionPaths"() {
+        when:
+        final executionContextDao = new JcrExecutionContextDao(mockFactory, stubSerializer)
+        final result = executionContextDao.getStepExecutionContextPaths([])
+
+        then:
+        1 == 1
+
+    }
 
     class StubExecutionContextSerializer implements ExecutionContextSerializer {
 

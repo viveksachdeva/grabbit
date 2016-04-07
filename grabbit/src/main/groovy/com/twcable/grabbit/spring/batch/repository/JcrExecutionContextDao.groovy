@@ -20,11 +20,7 @@ import com.twcable.grabbit.jcr.JcrUtil
 import com.twcable.grabbit.util.CryptoUtil
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
-import org.apache.sling.api.resource.ModifiableValueMap
-import org.apache.sling.api.resource.Resource
-import org.apache.sling.api.resource.ResourceResolver
-import org.apache.sling.api.resource.ResourceResolverFactory
-import org.apache.sling.api.resource.ValueMap
+import org.apache.sling.api.resource.*
 import org.springframework.batch.core.JobExecution
 import org.springframework.batch.core.StepExecution
 import org.springframework.batch.core.repository.ExecutionContextSerializer
@@ -33,6 +29,7 @@ import org.springframework.batch.item.ExecutionContext
 
 import javax.annotation.Nonnull
 
+import static com.twcable.grabbit.spring.batch.repository.JcrStepExecutionDao.ID
 import static org.apache.jackrabbit.JcrConstants.NT_UNSTRUCTURED
 import static org.apache.sling.api.resource.ResourceUtil.getOrCreateResource
 
@@ -42,7 +39,7 @@ import static org.apache.sling.api.resource.ResourceUtil.getOrCreateResource
  */
 @CompileStatic
 @Slf4j
-class JcrExecutionContextDao extends AbstractJcrDao implements ExecutionContextDao {
+class JcrExecutionContextDao extends AbstractJcrDao implements GrabbitExecutionContextDao {
 
     public static final String EXECUTION_CONTEXT_ROOT = "${ROOT_RESOURCE_NAME}/executionContexts"
     public static final String JOB_EXECUTION_CONTEXT_ROOT = "${EXECUTION_CONTEXT_ROOT}/job"
@@ -305,5 +302,43 @@ class JcrExecutionContextDao extends AbstractJcrDao implements ExecutionContextD
         ExecutionContext context = new ExecutionContext()
         contextAsMap.each { key, value -> context.put(key, value) }
         context
+    }
+
+    @Override
+    List<String> getJobExecutionContextPaths(List<String> jobExecutionResourcePaths) {
+        JcrUtil.manageResourceResolver(resourceResolverFactory) { ResourceResolver resolver ->
+            List<String> jobExecutionContextPathsToRemove = []
+            jobExecutionResourcePaths.each { String jobExecutionResourcePath ->
+                Resource jobExecutionResource = resolver.getResource(jobExecutionResourcePath)
+                ValueMap props = jobExecutionResource.adaptTo(ValueMap)
+                Long jobExecutionId = props[JcrJobExecutionDao.EXECUTION_ID] as Long
+                String query = "select * from [nt:unstructured] as s " +
+                        "where ISDESCENDANTNODE(s,'${JOB_EXECUTION_CONTEXT_ROOT}') AND ( s.${EXECUTION_ID} = ${jobExecutionId})"
+                List<String> jobExecutionContextPaths = resolver.findResources(query, "JCR-SQL2").toList().collect { it.path }
+                jobExecutionContextPathsToRemove.addAll(jobExecutionContextPaths)
+            }
+            //Duplicates need to be removed
+            return jobExecutionContextPathsToRemove.unique() as List<String>
+        }
+    }
+
+    @Override
+    List<String> getStepExecutionContextPaths(List<String> stepExecutionResourcePaths) {
+        JcrUtil.manageResourceResolver(resourceResolverFactory) { ResourceResolver resolver ->
+            List<String> stepExecutionContextPathsToRemove = []
+            stepExecutionResourcePaths.each { String stepExecutionResourcePath ->
+                Resource stepExecutionResource = resolver.getResource(stepExecutionResourcePath)
+                ValueMap props = stepExecutionResource.adaptTo(ValueMap)
+                Long stepExecutionId = props[ID] as Long
+                String query = "select * from [nt:unstructured] as s " +
+                        "where ISDESCENDANTNODE(s,'${STEP_EXECUTION_CONTEXT_ROOT}') AND ( s.${EXECUTION_ID} = ${stepExecutionId})"
+                List<String> stepExecutionContextPaths = resolver.findResources(query, "JCR-SQL2").toList().collect { it.path }
+                stepExecutionContextPathsToRemove.addAll(stepExecutionContextPaths)
+            }
+            //Duplicates need to be removed
+            return stepExecutionContextPathsToRemove.unique() as List<String>
+
+        }
+
     }
 }

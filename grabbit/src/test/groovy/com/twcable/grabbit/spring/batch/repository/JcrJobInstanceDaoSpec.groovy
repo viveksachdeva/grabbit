@@ -18,22 +18,15 @@ package com.twcable.grabbit.spring.batch.repository
 
 import com.twcable.jackalope.impl.sling.SimpleResourceResolverFactory
 import org.apache.sling.api.resource.ResourceResolverFactory
-import org.springframework.batch.core.DefaultJobKeyGenerator
-import org.springframework.batch.core.JobExecution
-import org.springframework.batch.core.JobInstance
-import org.springframework.batch.core.JobParameter
-import org.springframework.batch.core.JobParameters
+import org.springframework.batch.core.*
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Subject
 import spock.lang.Unroll
 
-import static com.twcable.grabbit.spring.batch.repository.JcrJobInstanceDao.INSTANCE_ID
-import static com.twcable.grabbit.spring.batch.repository.JcrJobInstanceDao.KEY
-import static com.twcable.grabbit.spring.batch.repository.JcrJobInstanceDao.NAME
-import static com.twcable.jackalope.JCRBuilder.node
-import static com.twcable.jackalope.JCRBuilder.property
-import static com.twcable.jackalope.JCRBuilder.repository
+import static com.twcable.grabbit.spring.batch.repository.JcrJobExecutionDao.*
+import static com.twcable.grabbit.spring.batch.repository.JcrJobInstanceDao.*
+import static com.twcable.jackalope.JCRBuilder.*
 
 @Subject(JcrJobInstanceDao)
 class JcrJobInstanceDaoSpec extends Specification {
@@ -66,7 +59,34 @@ class JcrJobInstanceDaoSpec extends Specification {
                                     property(INSTANCE_ID, 4),
                                     property(NAME, "someOtherJob"),
                                 )
-                            )
+                            ),
+                            node("jobExecutions",
+                                node("1",
+                                    property(JcrJobExecutionDao.INSTANCE_ID, 1),
+                                    property(EXECUTION_ID, 1),
+                                    property(TRANSACTION_ID, 5),
+                                    property(STATUS, "COMPLETED"),
+                                    property(EXIT_CODE, "code"),
+                                    property(EXIT_MESSAGE, "message"),
+                                    property(CREATE_TIME, "2014-12-27T16:59:18.669-05:00"),
+                                    property(END_TIME, "2014-12-29T16:59:18.669-05:00"),
+                                    property(JOB_NAME, "someJob"),
+                                    property(VERSION, 1)
+                                ),
+                                node("4",
+                                    property(JcrJobExecutionDao.INSTANCE_ID, 4),
+                                    property(EXECUTION_ID, 1),
+                                    property(TRANSACTION_ID, 5),
+                                    property(STATUS, "FAILED"),
+                                    property(EXIT_CODE, "code"),
+                                    property(EXIT_MESSAGE, "message"),
+                                    property(CREATE_TIME, "2014-12-27T16:59:18.669-05:00"),
+                                    property(END_TIME, "2015-12-29T16:59:18.669-05:00"),
+                                    property(JOB_NAME, "someJob"),
+                                    property(VERSION, 1)
+
+                                ),
+                            ),
                         )
                     )
                 )
@@ -146,4 +166,20 @@ class JcrJobInstanceDaoSpec extends Specification {
         then:
         result.containsAll(["someJob", "someOtherJob"])
     }
+
+    def "GetJobInstancePaths for jobExecutions"() {
+        when:
+        final jobInstanceDao = new JcrJobInstanceDao(mockFactory)
+        final jobExecutionPaths = [
+                "/var/grabbit/job/repository/jobExecutions/1",
+                "/var/grabbit/job/repository/jobExecutions/4"
+        ]
+
+        final result = jobInstanceDao.getJobInstancePaths(jobExecutionPaths)
+
+        then:
+        result != null
+        result.size() == 2
+    }
+
 }

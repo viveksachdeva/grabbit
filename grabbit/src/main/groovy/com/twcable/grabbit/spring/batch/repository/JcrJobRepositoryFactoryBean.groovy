@@ -76,22 +76,22 @@ class JcrJobRepositoryFactoryBean extends AbstractJobRepositoryFactoryBean {
     }
 
 
-    JobExecutionDao getJobExecutionDao() {
+    GrabbitJobExecutionDao getJobExecutionDao() {
         jobExecutionDao
     }
 
 
-    JobInstanceDao getJobInstanceDao() {
+    GrabbitJobInstanceDao getJobInstanceDao() {
         jobInstanceDao
     }
 
 
-    StepExecutionDao getStepExecutionDao() {
+    GrabbitStepExecutionDao getStepExecutionDao() {
         stepExecutionDao
     }
 
 
-    ExecutionContextDao getExecutionContextDao() {
+    GrabbitExecutionContextDao getExecutionContextDao() {
         executionContextDao
     }
 

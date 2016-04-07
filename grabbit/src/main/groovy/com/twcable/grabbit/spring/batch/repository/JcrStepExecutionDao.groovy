@@ -34,6 +34,7 @@ import org.springframework.batch.core.repository.dao.StepExecutionDao
 
 import javax.annotation.Nonnull
 
+import static com.twcable.grabbit.spring.batch.repository.JcrJobExecutionDao.EXECUTION_ID
 import static org.apache.jackrabbit.JcrConstants.NT_UNSTRUCTURED
 import static org.apache.sling.api.resource.ResourceUtil.getOrCreateResource
 
@@ -43,7 +44,7 @@ import static org.apache.sling.api.resource.ResourceUtil.getOrCreateResource
  */
 @CompileStatic
 @Slf4j
-public class JcrStepExecutionDao extends AbstractJcrDao implements StepExecutionDao {
+public class JcrStepExecutionDao extends AbstractJcrDao implements GrabbitStepExecutionDao {
 
     public static final String STEP_EXECUTION_ROOT = "${ROOT_RESOURCE_NAME}/stepExecutions"
 
@@ -294,6 +295,24 @@ public class JcrStepExecutionDao extends AbstractJcrDao implements StepExecution
                 //create the Root Resource
                 throw new IllegalStateException("Cannot get or create RootResource for : ${JcrJobExecutionDao.JOB_EXECUTION_ROOT}")
             }
+        }
+    }
+
+    @Override
+    List<String> getStepExecutionPaths(List<String> jobExecutionResourcePaths) {
+        JcrUtil.manageResourceResolver(resourceResolverFactory) { ResourceResolver resolver ->
+            List<String> stepExecutionsToRemove = []
+            jobExecutionResourcePaths.each { String jobExecutionResourcePath ->
+                Resource jobExecutionResource = resolver.getResource(jobExecutionResourcePath)
+                ValueMap props = jobExecutionResource.adaptTo(ValueMap)
+                Long jobExecutionId = props[EXECUTION_ID] as Long
+                String query = "select * from [nt:unstructured] as s " +
+                        "where ISDESCENDANTNODE(s,'${STEP_EXECUTION_ROOT}') AND ( s.${JOB_EXECUTION_ID} = ${jobExecutionId})"
+                List<String> stepExecutions = resolver.findResources(query, "JCR-SQL2").toList().collect { it.path }
+                stepExecutionsToRemove.addAll(stepExecutions)
+            }
+            //Duplicates need to be removed
+            return stepExecutionsToRemove.unique() as List<String>
         }
     }
 }

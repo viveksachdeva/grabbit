@@ -41,7 +41,7 @@ import static org.apache.sling.api.resource.ResourceUtil.getOrCreateResource
  */
 @CompileStatic
 @Slf4j
-class JcrJobInstanceDao extends AbstractJcrDao implements JobInstanceDao {
+class JcrJobInstanceDao extends AbstractJcrDao implements GrabbitJobInstanceDao {
 
     public static final String JOB_INSTANCE_ROOT = "${ROOT_RESOURCE_NAME}/jobInstances"
 
@@ -260,6 +260,29 @@ class JcrJobInstanceDao extends AbstractJcrDao implements JobInstanceDao {
         final nextId = (rootResource.children.asList().size() + 1) as Long
         log.debug "Next JobInstance Id : $nextId"
         nextId
+
+    }
+
+    @Override
+    List<String> getJobInstancePaths(List<String> jobExecutionResourcePaths) {
+        JcrUtil.manageResourceResolver(resourceResolverFactory) { ResourceResolver resolver ->
+            List<String> jobInstancesToRemove = []
+            jobExecutionResourcePaths.each { String jobExecutionResourcePath ->
+                Resource jobExecutionResource = resolver.getResource(jobExecutionResourcePath)
+                ValueMap props = jobExecutionResource.adaptTo(ValueMap)
+                Long instanceId = props[JcrJobExecutionDao.INSTANCE_ID] as Long
+                String jobInstanceToRemoveResourcePath = "${JOB_INSTANCE_ROOT}/${instanceId}".toString()
+                Resource jobInstanceToRemove = resolver.getResource(jobInstanceToRemoveResourcePath)
+                if (!jobInstanceToRemove) {
+                    log.info "JobInstance with id : ${instanceId} is already removed"
+                } else {
+                    jobInstancesToRemove.add(jobInstanceToRemoveResourcePath)
+                }
+            }
+            return jobInstancesToRemove
+
+
+        }
 
     }
 }

@@ -25,19 +25,8 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Subject
 
-import static com.twcable.grabbit.spring.batch.repository.JcrJobExecutionDao.CREATE_TIME
-import static com.twcable.grabbit.spring.batch.repository.JcrJobExecutionDao.END_TIME
-import static com.twcable.grabbit.spring.batch.repository.JcrJobExecutionDao.EXECUTION_ID
-import static com.twcable.grabbit.spring.batch.repository.JcrJobExecutionDao.EXIT_CODE
-import static com.twcable.grabbit.spring.batch.repository.JcrJobExecutionDao.EXIT_MESSAGE
-import static com.twcable.grabbit.spring.batch.repository.JcrJobExecutionDao.INSTANCE_ID
-import static com.twcable.grabbit.spring.batch.repository.JcrJobExecutionDao.JOB_NAME
-import static com.twcable.grabbit.spring.batch.repository.JcrJobExecutionDao.STATUS
-import static com.twcable.grabbit.spring.batch.repository.JcrJobExecutionDao.TRANSACTION_ID
-import static com.twcable.grabbit.spring.batch.repository.JcrJobExecutionDao.VERSION
-import static com.twcable.jackalope.JCRBuilder.node
-import static com.twcable.jackalope.JCRBuilder.property
-import static com.twcable.jackalope.JCRBuilder.repository
+import static com.twcable.grabbit.spring.batch.repository.JcrJobExecutionDao.*
+import static com.twcable.jackalope.JCRBuilder.*
 
 @Subject(JcrJobExecutionDao)
 class JcrJobExecutionDaoSpec extends Specification {
@@ -86,7 +75,20 @@ class JcrJobExecutionDaoSpec extends Specification {
                                     property(CREATE_TIME, "2014-12-29T16:59:18.669-05:00"),
                                     property(END_TIME, "NULL"),
                                     property(JOB_NAME, "someOtherJob")
-                                )
+                                ),
+                                node("4",
+                                    property(INSTANCE_ID, 1),
+                                    property(EXECUTION_ID, 1),
+                                    property(TRANSACTION_ID, 5),
+                                    property(STATUS, "FAILED"),
+                                    property(EXIT_CODE, "code"),
+                                    property(EXIT_MESSAGE, "message"),
+                                    property(CREATE_TIME, "2014-12-27T16:59:18.669-05:00"),
+                                    property(END_TIME, "2015-12-29T16:59:18.669-05:00"),
+                                    property(JOB_NAME, "someJob"),
+                                    property(VERSION, 1)
+
+                                ),
                             ),
                             node("jobInstances",
                                 node("1"))
@@ -116,7 +118,7 @@ class JcrJobExecutionDaoSpec extends Specification {
 
         then:
         result != null
-        result.size() == 2
+        result.size() == 3
         result.first().id == 2
     }
 
@@ -178,6 +180,21 @@ class JcrJobExecutionDaoSpec extends Specification {
 
         then:
         unsyncronized.version == 1
-        unsyncronized.status == BatchStatus.COMPLETED
+        unsyncronized.status == BatchStatus.FAILED
     }
+
+    def "GetOlderJobExecutions for hours and jobExecutions"() {
+        when:
+        final jobExecutionDao = new JcrJobExecutionDao(mockFactory)
+        final jobExecutionPaths = [
+                "/var/grabbit/job/repository/jobExecutions/1",
+                "/var/grabbit/job/repository/jobExecutions/4"
+        ]
+        final result = jobExecutionDao.getOlderJobExecutions(1, jobExecutionPaths)
+
+        then:
+        result != null
+        result.size() == 2
+    }
+
 }

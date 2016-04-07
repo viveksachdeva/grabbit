@@ -22,18 +22,10 @@ import org.springframework.batch.core.BatchStatus
 import org.springframework.batch.core.JobExecution
 import org.springframework.batch.core.JobInstance
 import org.springframework.batch.core.JobParameters
-import spock.lang.Shared
-import spock.lang.Specification
-import spock.lang.Subject
-import spock.lang.Unroll
+import spock.lang.*
 
-import static com.twcable.grabbit.spring.batch.repository.JcrStepExecutionDao.ID
-import static com.twcable.grabbit.spring.batch.repository.JcrStepExecutionDao.JOB_EXECUTION_ID
-import static com.twcable.grabbit.spring.batch.repository.JcrStepExecutionDao.NAME
-import static com.twcable.grabbit.spring.batch.repository.JcrStepExecutionDao.STATUS
-import static com.twcable.jackalope.JCRBuilder.node
-import static com.twcable.jackalope.JCRBuilder.property
-import static com.twcable.jackalope.JCRBuilder.repository
+import static com.twcable.grabbit.spring.batch.repository.JcrStepExecutionDao.*
+import static com.twcable.jackalope.JCRBuilder.*
 
 @Subject(JcrStepExecutionDao)
 class JcrStepExecutionDaoSpec extends Specification {
@@ -96,6 +88,17 @@ class JcrStepExecutionDaoSpec extends Specification {
         stepExecutionId | jobExecutionId | stepStatus
         1               | 1              | BatchStatus.COMPLETED
         5               | 3              | BatchStatus.STARTED
+
+    }
+
+    @Ignore('TODO: Implement this test when Jackalope implements resourceResolver.findResources() API')
+    def "GetStepExecutionPaths for jobResourcePaths"() {
+        when:
+        final stepExecutionDao = new JcrStepExecutionDao(mockFactory)
+        final result = stepExecutionDao.getStepExecutionPaths([])
+
+        then:
+        1 == 1
 
     }
 }
