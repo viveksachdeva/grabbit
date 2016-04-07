@@ -24,7 +24,6 @@ import spock.lang.Specification
 import spock.lang.Subject
 import spock.lang.Unroll
 
-import static com.twcable.grabbit.spring.batch.repository.JcrJobExecutionDao.*
 import static com.twcable.grabbit.spring.batch.repository.JcrJobInstanceDao.*
 import static com.twcable.jackalope.JCRBuilder.*
 
@@ -63,27 +62,27 @@ class JcrJobInstanceDaoSpec extends Specification {
                             node("jobExecutions",
                                 node("1",
                                     property(JcrJobExecutionDao.INSTANCE_ID, 1),
-                                    property(EXECUTION_ID, 1),
-                                    property(TRANSACTION_ID, 5),
-                                    property(STATUS, "COMPLETED"),
-                                    property(EXIT_CODE, "code"),
-                                    property(EXIT_MESSAGE, "message"),
-                                    property(CREATE_TIME, "2014-12-27T16:59:18.669-05:00"),
-                                    property(END_TIME, "2014-12-29T16:59:18.669-05:00"),
-                                    property(JOB_NAME, "someJob"),
-                                    property(VERSION, 1)
+                                    property(JcrJobExecutionDao.EXECUTION_ID, 1),
+                                    property(JcrJobExecutionDao.TRANSACTION_ID, 5),
+                                    property(JcrJobExecutionDao.STATUS, "COMPLETED"),
+                                    property(JcrJobExecutionDao.EXIT_CODE, "code"),
+                                    property(JcrJobExecutionDao.EXIT_MESSAGE, "message"),
+                                    property(JcrJobExecutionDao.CREATE_TIME, "2014-12-27T16:59:18.669-05:00"),
+                                    property(JcrJobExecutionDao.END_TIME, "2014-12-29T16:59:18.669-05:00"),
+                                    property(JcrJobExecutionDao.JOB_NAME, "someJob"),
+                                    property(JcrJobExecutionDao.VERSION, 1)
                                 ),
                                 node("4",
                                     property(JcrJobExecutionDao.INSTANCE_ID, 4),
-                                    property(EXECUTION_ID, 1),
-                                    property(TRANSACTION_ID, 5),
-                                    property(STATUS, "FAILED"),
-                                    property(EXIT_CODE, "code"),
-                                    property(EXIT_MESSAGE, "message"),
-                                    property(CREATE_TIME, "2014-12-27T16:59:18.669-05:00"),
-                                    property(END_TIME, "2015-12-29T16:59:18.669-05:00"),
-                                    property(JOB_NAME, "someJob"),
-                                    property(VERSION, 1)
+                                    property(JcrJobExecutionDao.EXECUTION_ID, 1),
+                                    property(JcrJobExecutionDao.TRANSACTION_ID, 5),
+                                    property(JcrJobExecutionDao.STATUS, "FAILED"),
+                                    property(JcrJobExecutionDao.EXIT_CODE, "code"),
+                                    property(JcrJobExecutionDao.EXIT_MESSAGE, "message"),
+                                    property(JcrJobExecutionDao.CREATE_TIME, "2014-12-27T16:59:18.669-05:00"),
+                                    property(JcrJobExecutionDao.END_TIME, "2015-12-29T16:59:18.669-05:00"),
+                                    property(JcrJobExecutionDao.JOB_NAME, "someJob"),
+                                    property(JcrJobExecutionDao.VERSION, 1)
 
                                 ),
                             ),
