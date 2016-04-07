@@ -384,7 +384,7 @@ class JcrJobExecutionDao extends AbstractJcrDao implements GrabbitJobExecutionDa
 
     @Override
     List<String> getJobExecutions(List<BatchStatus> batchStatuses) {
-        String statusPredicate = batchStatuses.collect { "s.status = '${it}'" }.join('or')
+        String statusPredicate = batchStatuses.collect { "s.status = '${it}'" }.join(' or ')
         JcrUtil.manageResourceResolver(resourceResolverFactory) { ResourceResolver resolver ->
             String jobExecutionsQuery = "select * from [nt:unstructured] as s where " +
                     "ISDESCENDANTNODE(s,'${JOB_EXECUTION_ROOT}') AND ( ${statusPredicate} )"
