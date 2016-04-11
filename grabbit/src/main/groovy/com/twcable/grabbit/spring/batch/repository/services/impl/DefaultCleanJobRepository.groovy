@@ -9,6 +9,7 @@ import org.apache.felix.scr.annotations.Activate
 import org.apache.felix.scr.annotations.Component
 import org.apache.felix.scr.annotations.Reference
 import org.apache.felix.scr.annotations.Service
+import org.apache.sling.api.resource.PersistenceException
 import org.apache.sling.api.resource.Resource
 import org.apache.sling.api.resource.ResourceResolver
 import org.apache.sling.api.resource.ResourceResolverFactory
@@ -35,9 +36,6 @@ class DefaultCleanJobRepository implements CleanJobRepository {
 
     @Override
     void cleanJobRepository(int hours) {
-         //TODO : Explain why unique() is required. There are 2 versions of Resources returned back
-         // One for JcrNodeResource and one for SocialResourceWrapper
-
          JcrJobRepositoryFactoryBean jobRepositoryFactoryBean = configurableApplicationContext.getBean(JcrJobRepositoryFactoryBean)
 
          List<String> jobExecutionPaths = jobRepositoryFactoryBean.jobExecutionDao.getJobExecutions([BatchStatus.FAILED, BatchStatus.COMPLETED])
@@ -68,17 +66,25 @@ class DefaultCleanJobRepository implements CleanJobRepository {
     }
 
     private void removeResources(List<String> resourcePathsToRemove, ResourceResolver resolver) {
-        resourcePathsToRemove.each {
-            Resource resourceToDelete = resolver.getResource(it)
-            if(resourceToDelete) {
-                resolver.delete(resourceToDelete)
-                log.debug "Resource ${it} will be removed"
+        try {
+            resourcePathsToRemove.each {
+                Resource resourceToDelete = resolver.getResource(it)
+                if(resourceToDelete) {
+                    resolver.delete(resourceToDelete)
+                    log.debug "Resource ${it} will be removed"
+                }
+                else {
+                    log.info "Resource ${it} doesn't exist"
+                }
             }
-            else {
-                log.info "Resource ${it} doesn't exist"
+            resolver.commit()
+            resolver.refresh()
+        }
+        catch(PersistenceException e) {
+            log.error "Exception while removing resources :", e
+            if(resolver.hasChanges()) {
+                resolver.revert()
             }
         }
-        resolver.commit()
-        resolver.refresh()
     }
 }

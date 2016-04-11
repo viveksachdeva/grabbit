@@ -20,6 +20,7 @@ import com.twcable.grabbit.jcr.JcrUtil
 import com.twcable.grabbit.util.CryptoUtil
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
+import org.apache.sling.api.SlingException
 import org.apache.sling.api.resource.*
 import org.springframework.batch.core.JobExecution
 import org.springframework.batch.core.StepExecution
@@ -314,10 +315,17 @@ class JcrExecutionContextDao extends AbstractJcrDao implements GrabbitExecutionC
                 Long jobExecutionId = props[JcrJobExecutionDao.EXECUTION_ID] as Long
                 String query = "select * from [nt:unstructured] as s " +
                         "where ISDESCENDANTNODE(s,'${JOB_EXECUTION_CONTEXT_ROOT}') AND ( s.${EXECUTION_ID} = ${jobExecutionId})"
-                List<String> jobExecutionContextPaths = resolver.findResources(query, "JCR-SQL2").toList().collect { it.path }
-                jobExecutionContextPathsToRemove.addAll(jobExecutionContextPaths)
+                try {
+                    List<String> jobExecutionContextPaths = resolver.findResources(query, "JCR-SQL2").toList().collect { it.path }
+                    jobExecutionContextPathsToRemove.addAll(jobExecutionContextPaths)
+                }
+                catch(SlingException | IllegalStateException e) {
+                    log.error "Exception when executing Query: ${query}. \nException - ", e
+                }
             }
-            //Duplicates need to be removed
+            //There are 2 versions of Resources returned back by findResources
+            //One for JcrNodeResource and one for SocialResourceWrapper
+            //Hence, duplicates need to be removed
             return jobExecutionContextPathsToRemove.unique() as List<String>
         }
     }
@@ -332,10 +340,16 @@ class JcrExecutionContextDao extends AbstractJcrDao implements GrabbitExecutionC
                 Long stepExecutionId = props[ID] as Long
                 String query = "select * from [nt:unstructured] as s " +
                         "where ISDESCENDANTNODE(s,'${STEP_EXECUTION_CONTEXT_ROOT}') AND ( s.${EXECUTION_ID} = ${stepExecutionId})"
-                List<String> stepExecutionContextPaths = resolver.findResources(query, "JCR-SQL2").toList().collect { it.path }
-                stepExecutionContextPathsToRemove.addAll(stepExecutionContextPaths)
+                try {
+                    List<String> stepExecutionContextPaths = resolver.findResources(query, "JCR-SQL2").toList().collect { it.path }
+                    stepExecutionContextPathsToRemove.addAll(stepExecutionContextPaths)
+                } catch (SlingException | IllegalStateException e) {
+                    log.error "Exception when executing Query: ${query}. \nException - ", e
+                }
             }
-            //Duplicates need to be removed
+            //There are 2 versions of Resources returned back by findResources
+            //One for JcrNodeResource and one for SocialResourceWrapper
+            //Hence, duplicates need to be removed
             return stepExecutionContextPathsToRemove.unique() as List<String>
 
         }

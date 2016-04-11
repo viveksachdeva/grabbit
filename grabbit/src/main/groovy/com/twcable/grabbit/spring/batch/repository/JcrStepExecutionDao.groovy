@@ -21,6 +21,7 @@ import com.twcable.grabbit.jcr.JcrUtil
 import com.twcable.grabbit.util.CryptoUtil
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
+import org.apache.sling.api.SlingException
 import org.apache.sling.api.resource.ModifiableValueMap
 import org.apache.sling.api.resource.Resource
 import org.apache.sling.api.resource.ResourceResolver
@@ -308,10 +309,16 @@ public class JcrStepExecutionDao extends AbstractJcrDao implements GrabbitStepEx
                 Long jobExecutionId = props[EXECUTION_ID] as Long
                 String query = "select * from [nt:unstructured] as s " +
                         "where ISDESCENDANTNODE(s,'${STEP_EXECUTION_ROOT}') AND ( s.${JOB_EXECUTION_ID} = ${jobExecutionId})"
-                List<String> stepExecutions = resolver.findResources(query, "JCR-SQL2").toList().collect { it.path }
-                stepExecutionsToRemove.addAll(stepExecutions)
+                try {
+                    List<String> stepExecutions = resolver.findResources(query, "JCR-SQL2").toList().collect { it.path }
+                    stepExecutionsToRemove.addAll(stepExecutions)
+                } catch (SlingException | IllegalStateException e) {
+                    log.error "Exception when executing Query: ${query}. \nException - ", e
+                }
             }
-            //Duplicates need to be removed
+            //There are 2 versions of Resources returned back by findResources
+            //One for JcrNodeResource and one for SocialResourceWrapper
+            //Hence, duplicates need to be removed
             return stepExecutionsToRemove.unique() as List<String>
         }
     }
