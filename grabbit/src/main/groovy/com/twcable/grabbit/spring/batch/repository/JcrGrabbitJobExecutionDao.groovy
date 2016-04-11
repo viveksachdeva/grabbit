@@ -399,7 +399,7 @@ class JcrGrabbitJobExecutionDao extends AbstractJcrDao implements GrabbitJobExec
     }
 
     @Override
-    List<String> getOlderJobExecutions(int hours, List<String> jobExecutions) {
+    List<String> getJobExecutions(int hours, List<String> jobExecutions) {
         JcrUtil.manageResourceResolver(resourceResolverFactory) { ResourceResolver resolver ->
             //Create a Date object that is "hours" ago from now
             Calendar olderThanHours = Calendar.getInstance()

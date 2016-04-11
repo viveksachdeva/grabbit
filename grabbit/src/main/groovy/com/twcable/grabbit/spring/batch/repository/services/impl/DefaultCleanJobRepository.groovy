@@ -36,32 +36,37 @@ class DefaultCleanJobRepository implements CleanJobRepository {
 
     @Override
     void cleanJobRepository(int hours) {
-         JcrJobRepositoryFactoryBean jobRepositoryFactoryBean = configurableApplicationContext.getBean(JcrJobRepositoryFactoryBean)
+        JcrJobRepositoryFactoryBean jobRepositoryFactoryBean = configurableApplicationContext.getBean(JcrJobRepositoryFactoryBean)
 
-         List<String> jobExecutionPaths = jobRepositoryFactoryBean.jobExecutionDao.getJobExecutions([BatchStatus.FAILED, BatchStatus.COMPLETED])
-         List<String> olderThanHoursJobExecutions = jobRepositoryFactoryBean.jobExecutionDao.getOlderJobExecutions(hours, jobExecutionPaths)
-         List<String> jobInstancesToRemove = jobRepositoryFactoryBean.jobInstanceDao.getJobInstancePaths(olderThanHoursJobExecutions)
-         List<String> stepExecutionsToRemove = jobRepositoryFactoryBean.stepExecutionDao.getStepExecutionPaths(olderThanHoursJobExecutions)
-         List<String> jobExecutionContextsToRemove = jobRepositoryFactoryBean.executionContextDao.getJobExecutionContextPaths(olderThanHoursJobExecutions)
-         List<String> stepExecutionContextsToRemove = jobRepositoryFactoryBean.executionContextDao.getStepExecutionContextPaths(stepExecutionsToRemove)
+        if(!jobRepositoryFactoryBean) {
+            log.error "Cannot get an instance of JcrJobRepositoryFactoryBean. Will not clean up Grabbit Jcr Job Repository"
+            return
+        }
 
-         JcrUtil.withResourceResolver(resourceResolverFactory, "admin") { ResourceResolver resolver ->
+        List<String> jobExecutionPaths = jobRepositoryFactoryBean.jobExecutionDao.getJobExecutions([BatchStatus.FAILED, BatchStatus.COMPLETED])
+        List<String> olderThanHoursJobExecutions = jobRepositoryFactoryBean.jobExecutionDao.getJobExecutions(hours, jobExecutionPaths)
+        List<String> jobInstancesToRemove = jobRepositoryFactoryBean.jobInstanceDao.getJobInstancePaths(olderThanHoursJobExecutions)
+        List<String> stepExecutionsToRemove = jobRepositoryFactoryBean.stepExecutionDao.getStepExecutionPaths(olderThanHoursJobExecutions)
+        List<String> jobExecutionContextsToRemove = jobRepositoryFactoryBean.executionContextDao.getJobExecutionContextPaths(olderThanHoursJobExecutions)
+        List<String> stepExecutionContextsToRemove = jobRepositoryFactoryBean.executionContextDao.getStepExecutionContextPaths(stepExecutionsToRemove)
 
-             log.info "jobInstancesToRemove: $jobInstancesToRemove, size: ${jobInstancesToRemove.size()}"
-             log.info "stepExecutionsToRemove: $stepExecutionsToRemove, size: ${stepExecutionsToRemove.size()}"
-             log.info "jobExecutionContextsToRemove: $jobExecutionContextsToRemove, size: ${jobExecutionContextsToRemove.size()}"
-             log.info "stepExecutionContextsToResource: $stepExecutionContextsToRemove, size: ${stepExecutionContextsToRemove.size()}"
+        JcrUtil.manageResourceResolver(resourceResolverFactory) { ResourceResolver resolver ->
 
-             log.info "Removing ${jobInstancesToRemove.size()} JobInstances"
-             removeResources(jobInstancesToRemove, resolver)
-             log.info "Removing ${olderThanHoursJobExecutions.size()} JobExecutions"
-             removeResources(olderThanHoursJobExecutions, resolver)
-             log.info "Removing ${stepExecutionsToRemove.size()} StepExecutions"
-             removeResources(stepExecutionsToRemove, resolver)
-             log.info "Removing ${jobExecutionContextsToRemove.size()} JobExecutionContexts"
-             removeResources(jobExecutionContextsToRemove, resolver)
-             log.info "Removing ${stepExecutionContextsToRemove.size()} StepExecutionContexts"
-             removeResources(stepExecutionContextsToRemove, resolver)
+            log.debug "jobInstancesToRemove: $jobInstancesToRemove, size: ${jobInstancesToRemove.size()}"
+            log.debug "stepExecutionsToRemove: $stepExecutionsToRemove, size: ${stepExecutionsToRemove.size()}"
+            log.debug "jobExecutionContextsToRemove: $jobExecutionContextsToRemove, size: ${jobExecutionContextsToRemove.size()}"
+            log.debug "stepExecutionContextsToResource: $stepExecutionContextsToRemove, size: ${stepExecutionContextsToRemove.size()}"
+
+            log.info "Removing ${jobInstancesToRemove.size()} JobInstances"
+            removeResources(jobInstancesToRemove, resolver)
+            log.info "Removing ${olderThanHoursJobExecutions.size()} JobExecutions"
+            removeResources(olderThanHoursJobExecutions, resolver)
+            log.info "Removing ${stepExecutionsToRemove.size()} StepExecutions"
+            removeResources(stepExecutionsToRemove, resolver)
+            log.info "Removing ${jobExecutionContextsToRemove.size()} JobExecutionContexts"
+            removeResources(jobExecutionContextsToRemove, resolver)
+            log.info "Removing ${stepExecutionContextsToRemove.size()} StepExecutionContexts"
+            removeResources(stepExecutionContextsToRemove, resolver)
         }
     }
 
@@ -74,7 +79,7 @@ class DefaultCleanJobRepository implements CleanJobRepository {
                     log.debug "Resource ${it} will be removed"
                 }
                 else {
-                    log.info "Resource ${it} doesn't exist"
+                    log.warn "Resource ${it} doesn't exist. So cannot remove it"
                 }
             }
             resolver.commit()

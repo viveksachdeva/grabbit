@@ -183,14 +183,14 @@ class JcrGrabbitJobExecutionDaoSpec extends Specification {
         unsyncronized.status == BatchStatus.FAILED
     }
 
-    def "GetOlderJobExecutions for hours and jobExecutions"() {
+    def "GetJobExecutions for hours and jobExecutions"() {
         when:
         final jobExecutionDao = new JcrGrabbitJobExecutionDao(mockFactory)
         final jobExecutionPaths = [
                 "/var/grabbit/job/repository/jobExecutions/1",
                 "/var/grabbit/job/repository/jobExecutions/4"
         ]
-        final result = jobExecutionDao.getOlderJobExecutions(1, jobExecutionPaths)
+        final result = jobExecutionDao.getJobExecutions(1, jobExecutionPaths)
 
         then:
         result != null
