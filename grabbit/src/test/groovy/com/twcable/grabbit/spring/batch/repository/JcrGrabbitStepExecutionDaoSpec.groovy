@@ -24,11 +24,11 @@ import org.springframework.batch.core.JobInstance
 import org.springframework.batch.core.JobParameters
 import spock.lang.*
 
-import static com.twcable.grabbit.spring.batch.repository.JcrStepExecutionDao.*
+import static JcrGrabbitStepExecutionDao.*
 import static com.twcable.jackalope.JCRBuilder.*
 
-@Subject(JcrStepExecutionDao)
-class JcrStepExecutionDaoSpec extends Specification {
+@Subject(JcrGrabbitStepExecutionDao)
+class JcrGrabbitStepExecutionDaoSpec extends Specification {
 
     @Shared
     ResourceResolverFactory mockFactory
@@ -63,9 +63,9 @@ class JcrStepExecutionDaoSpec extends Specification {
     }
 
 
-    def "EnsureRootResource for JcrStepExecutionDao"() {
+    def "EnsureRootResource for JcrGrabbitStepExecutionDao"() {
         when:
-        final stepExecutionDao = new JcrStepExecutionDao(mockFactory)
+        final stepExecutionDao = new JcrGrabbitStepExecutionDao(mockFactory)
         stepExecutionDao.ensureRootResource()
 
         then:
@@ -76,7 +76,7 @@ class JcrStepExecutionDaoSpec extends Specification {
     @Unroll
     def "GetStepExecution for a given JobExecution and a StepExecution id #stepExecutionId"() {
         when:
-        final stepExecutionDao = new JcrStepExecutionDao(mockFactory)
+        final stepExecutionDao = new JcrGrabbitStepExecutionDao(mockFactory)
         final result = stepExecutionDao.getStepExecution(new JobExecution(new JobInstance(1, "someJob"), jobExecutionId, new JobParameters()), stepExecutionId)
 
         then:
@@ -94,7 +94,7 @@ class JcrStepExecutionDaoSpec extends Specification {
     @Ignore('TODO: Implement this test when Jackalope implements resourceResolver.findResources() API')
     def "GetStepExecutionPaths for jobResourcePaths"() {
         when:
-        final stepExecutionDao = new JcrStepExecutionDao(mockFactory)
+        final stepExecutionDao = new JcrGrabbitStepExecutionDao(mockFactory)
         final result = stepExecutionDao.getStepExecutionPaths([])
 
         then:

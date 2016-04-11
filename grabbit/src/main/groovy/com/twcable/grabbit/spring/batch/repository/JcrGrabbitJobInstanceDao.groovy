@@ -41,7 +41,7 @@ import static org.apache.sling.api.resource.ResourceUtil.getOrCreateResource
  */
 @CompileStatic
 @Slf4j
-class JcrJobInstanceDao extends AbstractJcrDao implements GrabbitJobInstanceDao {
+class JcrGrabbitJobInstanceDao extends AbstractJcrDao implements GrabbitJobInstanceDao {
 
     public static final String JOB_INSTANCE_ROOT = "${ROOT_RESOURCE_NAME}/jobInstances"
 
@@ -54,7 +54,7 @@ class JcrJobInstanceDao extends AbstractJcrDao implements GrabbitJobInstanceDao 
     private ResourceResolverFactory resourceResolverFactory
 
 
-    JcrJobInstanceDao(ResourceResolverFactory rrf) {
+    JcrGrabbitJobInstanceDao(ResourceResolverFactory rrf) {
         this.resourceResolverFactory = rrf
     }
 
@@ -235,7 +235,7 @@ class JcrJobInstanceDao extends AbstractJcrDao implements GrabbitJobInstanceDao 
     }
 
     /**
-     * Must be called when a new instance of JcrJobInstanceDao is created.
+     * Must be called when a new instance of JcrGrabbitJobInstanceDao is created.
      * Ensures that {@link #JOB_INSTANCE_ROOT} exists on initialization
      */
     @Override
@@ -270,7 +270,7 @@ class JcrJobInstanceDao extends AbstractJcrDao implements GrabbitJobInstanceDao 
             jobExecutionResourcePaths.each { String jobExecutionResourcePath ->
                 Resource jobExecutionResource = resolver.getResource(jobExecutionResourcePath)
                 ValueMap props = jobExecutionResource.adaptTo(ValueMap)
-                Long instanceId = props[JcrJobExecutionDao.INSTANCE_ID] as Long
+                Long instanceId = props[JcrGrabbitJobExecutionDao.INSTANCE_ID] as Long
                 String jobInstanceToRemoveResourcePath = "${JOB_INSTANCE_ROOT}/${instanceId}".toString()
                 Resource jobInstanceToRemove = resolver.getResource(jobInstanceToRemoveResourcePath)
                 if (!jobInstanceToRemove) {

@@ -26,12 +26,12 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Subject
 
-import static com.twcable.grabbit.spring.batch.repository.JcrExecutionContextDao.EXECUTION_CONTEXT
-import static com.twcable.grabbit.spring.batch.repository.JcrExecutionContextDao.EXECUTION_ID
+import static JcrGrabbitExecutionContextDao.EXECUTION_CONTEXT
+import static JcrGrabbitExecutionContextDao.EXECUTION_ID
 import static com.twcable.jackalope.JCRBuilder.*
 
-@Subject(JcrExecutionContextDao)
-class JcrExecutionContextDaoSpec extends Specification {
+@Subject(JcrGrabbitExecutionContextDao)
+class JcrGrabbitExecutionContextDaoSpec extends Specification {
 
     @Shared
     ResourceResolverFactory mockFactory
@@ -69,9 +69,9 @@ class JcrExecutionContextDaoSpec extends Specification {
     }
 
 
-    def "EnsureRootResource for JcrExecutionContextDao"() {
+    def "EnsureRootResource for JcrGrabbitExecutionContextDao"() {
         when:
-        final executionContextDao = new JcrExecutionContextDao(mockFactory, stubSerializer)
+        final executionContextDao = new JcrGrabbitExecutionContextDao(mockFactory, stubSerializer)
         executionContextDao.ensureRootResource()
 
         then:
@@ -82,7 +82,7 @@ class JcrExecutionContextDaoSpec extends Specification {
 
     def "GetExecutionContext for a JobExecution"() {
         when:
-        final executionContextDao = new JcrExecutionContextDao(mockFactory, stubSerializer)
+        final executionContextDao = new JcrGrabbitExecutionContextDao(mockFactory, stubSerializer)
         final result = executionContextDao.getExecutionContext(new JobExecution(1))
 
         then:
@@ -93,7 +93,7 @@ class JcrExecutionContextDaoSpec extends Specification {
 
     def "GetExecutionContext for a StepExecution"() {
         when:
-        final executionContextDao = new JcrExecutionContextDao(mockFactory, stubSerializer)
+        final executionContextDao = new JcrGrabbitExecutionContextDao(mockFactory, stubSerializer)
         final result = executionContextDao.getExecutionContext(new StepExecution("someStep", new JobExecution(1), 1))
 
         then:
@@ -104,7 +104,7 @@ class JcrExecutionContextDaoSpec extends Specification {
     @Ignore('TODO: Implement this test when Jackalope implements resourceResolver.findResources() API')
     def "GetJobExecutionContextPaths for JobExecutionPaths"() {
         when:
-        final executionContextDao = new JcrExecutionContextDao(mockFactory, stubSerializer)
+        final executionContextDao = new JcrGrabbitExecutionContextDao(mockFactory, stubSerializer)
         final result = executionContextDao.getJobExecutionContextPaths([])
 
         then:
@@ -114,7 +114,7 @@ class JcrExecutionContextDaoSpec extends Specification {
     @Ignore('TODO: Implement this test when Jackalope implements resourceResolver.findResources() API')
     def "GetStepExecutionContextPaths for JobExecutionPaths"() {
         when:
-        final executionContextDao = new JcrExecutionContextDao(mockFactory, stubSerializer)
+        final executionContextDao = new JcrGrabbitExecutionContextDao(mockFactory, stubSerializer)
         final result = executionContextDao.getStepExecutionContextPaths([])
 
         then:

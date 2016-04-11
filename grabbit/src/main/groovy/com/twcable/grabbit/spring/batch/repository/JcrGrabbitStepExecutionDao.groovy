@@ -35,7 +35,7 @@ import org.springframework.batch.core.repository.dao.StepExecutionDao
 
 import javax.annotation.Nonnull
 
-import static com.twcable.grabbit.spring.batch.repository.JcrJobExecutionDao.EXECUTION_ID
+import static JcrGrabbitJobExecutionDao.EXECUTION_ID
 import static org.apache.jackrabbit.JcrConstants.NT_UNSTRUCTURED
 import static org.apache.sling.api.resource.ResourceUtil.getOrCreateResource
 
@@ -45,7 +45,7 @@ import static org.apache.sling.api.resource.ResourceUtil.getOrCreateResource
  */
 @CompileStatic
 @Slf4j
-public class JcrStepExecutionDao extends AbstractJcrDao implements GrabbitStepExecutionDao {
+public class JcrGrabbitStepExecutionDao extends AbstractJcrDao implements GrabbitStepExecutionDao {
 
     public static final String STEP_EXECUTION_ROOT = "${ROOT_RESOURCE_NAME}/stepExecutions"
 
@@ -71,7 +71,7 @@ public class JcrStepExecutionDao extends AbstractJcrDao implements GrabbitStepEx
     private ResourceResolverFactory resourceResolverFactory
 
 
-    JcrStepExecutionDao(ResourceResolverFactory rrf) {
+    JcrGrabbitStepExecutionDao(ResourceResolverFactory rrf) {
         this.resourceResolverFactory = rrf
     }
 
@@ -281,7 +281,7 @@ public class JcrStepExecutionDao extends AbstractJcrDao implements GrabbitStepEx
     }
 
     /**
-     * Must be called when a new instance of JcrStepExecutionDao is created.
+     * Must be called when a new instance of JcrGrabbitStepExecutionDao is created.
      * Ensures that {@link #STEP_EXECUTION_ROOT} exists on initialization
      */
     @Override
@@ -292,9 +292,9 @@ public class JcrStepExecutionDao extends AbstractJcrDao implements GrabbitStepEx
                 //create the Root Resource
                 throw new IllegalStateException("Cannot get or create RootResource for : ${STEP_EXECUTION_ROOT}")
             }
-            if (!getOrCreateResource(resolver, JcrJobExecutionDao.JOB_EXECUTION_ROOT, NT_UNSTRUCTURED, NT_UNSTRUCTURED, true)) {
+            if (!getOrCreateResource(resolver, JcrGrabbitJobExecutionDao.JOB_EXECUTION_ROOT, NT_UNSTRUCTURED, NT_UNSTRUCTURED, true)) {
                 //create the Root Resource
-                throw new IllegalStateException("Cannot get or create RootResource for : ${JcrJobExecutionDao.JOB_EXECUTION_ROOT}")
+                throw new IllegalStateException("Cannot get or create RootResource for : ${JcrGrabbitJobExecutionDao.JOB_EXECUTION_ROOT}")
             }
         }
     }

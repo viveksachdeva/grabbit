@@ -30,7 +30,7 @@ import org.springframework.batch.item.ExecutionContext
 
 import javax.annotation.Nonnull
 
-import static com.twcable.grabbit.spring.batch.repository.JcrStepExecutionDao.ID
+import static JcrGrabbitStepExecutionDao.ID
 import static org.apache.jackrabbit.JcrConstants.NT_UNSTRUCTURED
 import static org.apache.sling.api.resource.ResourceUtil.getOrCreateResource
 
@@ -40,7 +40,7 @@ import static org.apache.sling.api.resource.ResourceUtil.getOrCreateResource
  */
 @CompileStatic
 @Slf4j
-class JcrExecutionContextDao extends AbstractJcrDao implements GrabbitExecutionContextDao {
+class JcrGrabbitExecutionContextDao extends AbstractJcrDao implements GrabbitExecutionContextDao {
 
     public static final String EXECUTION_CONTEXT_ROOT = "${ROOT_RESOURCE_NAME}/executionContexts"
     public static final String JOB_EXECUTION_CONTEXT_ROOT = "${EXECUTION_CONTEXT_ROOT}/job"
@@ -53,7 +53,7 @@ class JcrExecutionContextDao extends AbstractJcrDao implements GrabbitExecutionC
     private ExecutionContextSerializer contextSerializer
 
 
-    JcrExecutionContextDao(
+    JcrGrabbitExecutionContextDao(
         @Nonnull final ResourceResolverFactory rrf, @Nonnull final ExecutionContextSerializer serializer) {
         this.resourceResolverFactory = rrf
         this.contextSerializer = serializer
@@ -154,7 +154,7 @@ class JcrExecutionContextDao extends AbstractJcrDao implements GrabbitExecutionC
     }
 
     /**
-     * Must be called when a new instance of JcrExecutionContextDao is created.
+     * Must be called when a new instance of JcrGrabbitExecutionContextDao is created.
      * Ensures that {@link #STEP_EXECUTION_CONTEXT_ROOT} and {@link #JOB_EXECUTION_CONTEXT_ROOT} exist on initialization
      */
     @Override
@@ -312,7 +312,7 @@ class JcrExecutionContextDao extends AbstractJcrDao implements GrabbitExecutionC
             jobExecutionResourcePaths.each { String jobExecutionResourcePath ->
                 Resource jobExecutionResource = resolver.getResource(jobExecutionResourcePath)
                 ValueMap props = jobExecutionResource.adaptTo(ValueMap)
-                Long jobExecutionId = props[JcrJobExecutionDao.EXECUTION_ID] as Long
+                Long jobExecutionId = props[JcrGrabbitJobExecutionDao.EXECUTION_ID] as Long
                 String query = "select * from [nt:unstructured] as s " +
                         "where ISDESCENDANTNODE(s,'${JOB_EXECUTION_CONTEXT_ROOT}') AND ( s.${EXECUTION_ID} = ${jobExecutionId})"
                 try {

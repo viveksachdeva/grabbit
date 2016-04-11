@@ -24,11 +24,11 @@ import spock.lang.Specification
 import spock.lang.Subject
 import spock.lang.Unroll
 
-import static com.twcable.grabbit.spring.batch.repository.JcrJobInstanceDao.*
+import static JcrGrabbitJobInstanceDao.*
 import static com.twcable.jackalope.JCRBuilder.*
 
-@Subject(JcrJobInstanceDao)
-class JcrJobInstanceDaoSpec extends Specification {
+@Subject(JcrGrabbitJobInstanceDao)
+class JcrGrabbitJobInstanceDaoSpec extends Specification {
 
     @Shared
     ResourceResolverFactory mockFactory
@@ -61,28 +61,28 @@ class JcrJobInstanceDaoSpec extends Specification {
                             ),
                             node("jobExecutions",
                                 node("1",
-                                    property(JcrJobExecutionDao.INSTANCE_ID, 1),
-                                    property(JcrJobExecutionDao.EXECUTION_ID, 1),
-                                    property(JcrJobExecutionDao.TRANSACTION_ID, 5),
-                                    property(JcrJobExecutionDao.STATUS, "COMPLETED"),
-                                    property(JcrJobExecutionDao.EXIT_CODE, "code"),
-                                    property(JcrJobExecutionDao.EXIT_MESSAGE, "message"),
-                                    property(JcrJobExecutionDao.CREATE_TIME, "2014-12-27T16:59:18.669-05:00"),
-                                    property(JcrJobExecutionDao.END_TIME, "2014-12-29T16:59:18.669-05:00"),
-                                    property(JcrJobExecutionDao.JOB_NAME, "someJob"),
-                                    property(JcrJobExecutionDao.VERSION, 1)
+                                    property(JcrGrabbitJobExecutionDao.INSTANCE_ID, 1),
+                                    property(JcrGrabbitJobExecutionDao.EXECUTION_ID, 1),
+                                    property(JcrGrabbitJobExecutionDao.TRANSACTION_ID, 5),
+                                    property(JcrGrabbitJobExecutionDao.STATUS, "COMPLETED"),
+                                    property(JcrGrabbitJobExecutionDao.EXIT_CODE, "code"),
+                                    property(JcrGrabbitJobExecutionDao.EXIT_MESSAGE, "message"),
+                                    property(JcrGrabbitJobExecutionDao.CREATE_TIME, "2014-12-27T16:59:18.669-05:00"),
+                                    property(JcrGrabbitJobExecutionDao.END_TIME, "2014-12-29T16:59:18.669-05:00"),
+                                    property(JcrGrabbitJobExecutionDao.JOB_NAME, "someJob"),
+                                    property(JcrGrabbitJobExecutionDao.VERSION, 1)
                                 ),
                                 node("4",
-                                    property(JcrJobExecutionDao.INSTANCE_ID, 4),
-                                    property(JcrJobExecutionDao.EXECUTION_ID, 1),
-                                    property(JcrJobExecutionDao.TRANSACTION_ID, 5),
-                                    property(JcrJobExecutionDao.STATUS, "FAILED"),
-                                    property(JcrJobExecutionDao.EXIT_CODE, "code"),
-                                    property(JcrJobExecutionDao.EXIT_MESSAGE, "message"),
-                                    property(JcrJobExecutionDao.CREATE_TIME, "2014-12-27T16:59:18.669-05:00"),
-                                    property(JcrJobExecutionDao.END_TIME, "2015-12-29T16:59:18.669-05:00"),
-                                    property(JcrJobExecutionDao.JOB_NAME, "someJob"),
-                                    property(JcrJobExecutionDao.VERSION, 1)
+                                    property(JcrGrabbitJobExecutionDao.INSTANCE_ID, 4),
+                                    property(JcrGrabbitJobExecutionDao.EXECUTION_ID, 1),
+                                    property(JcrGrabbitJobExecutionDao.TRANSACTION_ID, 5),
+                                    property(JcrGrabbitJobExecutionDao.STATUS, "FAILED"),
+                                    property(JcrGrabbitJobExecutionDao.EXIT_CODE, "code"),
+                                    property(JcrGrabbitJobExecutionDao.EXIT_MESSAGE, "message"),
+                                    property(JcrGrabbitJobExecutionDao.CREATE_TIME, "2014-12-27T16:59:18.669-05:00"),
+                                    property(JcrGrabbitJobExecutionDao.END_TIME, "2015-12-29T16:59:18.669-05:00"),
+                                    property(JcrGrabbitJobExecutionDao.JOB_NAME, "someJob"),
+                                    property(JcrGrabbitJobExecutionDao.VERSION, 1)
 
                                 ),
                             ),
@@ -94,9 +94,9 @@ class JcrJobInstanceDaoSpec extends Specification {
     }
 
 
-    def "EnsureRootResource for JcrJobInstanceDao"() {
+    def "EnsureRootResource for JcrGrabbitJobInstanceDao"() {
         when:
-        final jobInstanceDao = new JcrJobInstanceDao(mockFactory)
+        final jobInstanceDao = new JcrGrabbitJobInstanceDao(mockFactory)
         jobInstanceDao.ensureRootResource()
 
         then:
@@ -106,7 +106,7 @@ class JcrJobInstanceDaoSpec extends Specification {
 
     def "GetJobInstance for given JobExecution"() {
         when:
-        final jobInstanceDao = new JcrJobInstanceDao(mockFactory)
+        final jobInstanceDao = new JcrGrabbitJobInstanceDao(mockFactory)
         final result = jobInstanceDao.getJobInstance(new JobExecution(new JobInstance(1, "someJob"), new JobParameters()))
 
         then:
@@ -118,7 +118,7 @@ class JcrJobInstanceDaoSpec extends Specification {
 
     def "GetJobInstance for given InstanceId"() {
         when:
-        final jobInstanceDao = new JcrJobInstanceDao(mockFactory)
+        final jobInstanceDao = new JcrGrabbitJobInstanceDao(mockFactory)
         final result = jobInstanceDao.getJobInstance(1)
 
         then:
@@ -130,7 +130,7 @@ class JcrJobInstanceDaoSpec extends Specification {
 
     def "GetJobInstance for given Job Name and Job parameters"() {
         when:
-        final jobInstanceDao = new JcrJobInstanceDao(mockFactory)
+        final jobInstanceDao = new JcrGrabbitJobInstanceDao(mockFactory)
         final result = jobInstanceDao.getJobInstance("someJob", new JobParameters([someKey: new JobParameter("someValue")]))
 
         then:
@@ -142,7 +142,7 @@ class JcrJobInstanceDaoSpec extends Specification {
     @Unroll
     def "GetJobInstances for given Job Name #jobName, a start index and count"() {
         when:
-        final jobInstanceDao = new JcrJobInstanceDao(mockFactory)
+        final jobInstanceDao = new JcrGrabbitJobInstanceDao(mockFactory)
         final result = jobInstanceDao.getJobInstances(jobName, 0, Integer.MAX_VALUE)
 
         then:
@@ -159,7 +159,7 @@ class JcrJobInstanceDaoSpec extends Specification {
 
     def "GetJobNames for Job Instances"() {
         when:
-        final jobInstanceDao = new JcrJobInstanceDao(mockFactory)
+        final jobInstanceDao = new JcrGrabbitJobInstanceDao(mockFactory)
         final result = jobInstanceDao.jobNames
 
         then:
@@ -168,7 +168,7 @@ class JcrJobInstanceDaoSpec extends Specification {
 
     def "GetJobInstancePaths for jobExecutions"() {
         when:
-        final jobInstanceDao = new JcrJobInstanceDao(mockFactory)
+        final jobInstanceDao = new JcrGrabbitJobInstanceDao(mockFactory)
         final jobExecutionPaths = [
                 "/var/grabbit/job/repository/jobExecutions/1",
                 "/var/grabbit/job/repository/jobExecutions/4"

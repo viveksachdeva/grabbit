@@ -29,7 +29,7 @@ import org.springframework.batch.core.repository.dao.JobExecutionDao
 
 import javax.annotation.Nonnull
 
-import static JcrJobInstanceDao.JOB_INSTANCE_ROOT
+import static JcrGrabbitJobInstanceDao.JOB_INSTANCE_ROOT
 import static org.apache.jackrabbit.JcrConstants.NT_UNSTRUCTURED
 import static org.apache.sling.api.resource.ResourceUtil.getOrCreateResource
 
@@ -39,7 +39,7 @@ import static org.apache.sling.api.resource.ResourceUtil.getOrCreateResource
  */
 @CompileStatic
 @Slf4j
-class JcrJobExecutionDao extends AbstractJcrDao implements GrabbitJobExecutionDao {
+class JcrGrabbitJobExecutionDao extends AbstractJcrDao implements GrabbitJobExecutionDao {
 
     public static final String JOB_EXECUTION_ROOT = "${ROOT_RESOURCE_NAME}/jobExecutions"
 
@@ -59,7 +59,7 @@ class JcrJobExecutionDao extends AbstractJcrDao implements GrabbitJobExecutionDa
     private ResourceResolverFactory resourceResolverFactory
 
 
-    JcrJobExecutionDao(ResourceResolverFactory rrf) {
+    JcrGrabbitJobExecutionDao(ResourceResolverFactory rrf) {
         this.resourceResolverFactory = rrf
     }
 
@@ -184,7 +184,7 @@ class JcrJobExecutionDao extends AbstractJcrDao implements GrabbitJobExecutionDa
     }
 
     /**
-     * Returns JobParameters using the given instanceId from {@link JcrJobInstanceDao#JOB_INSTANCE_ROOT}
+     * Returns JobParameters using the given instanceId from {@link JcrGrabbitJobInstanceDao#JOB_INSTANCE_ROOT}
      *
      * @see #mapJobExecution(ResourceResolver, ValueMap, JobInstance)
      */
@@ -193,7 +193,7 @@ class JcrJobExecutionDao extends AbstractJcrDao implements GrabbitJobExecutionDa
         final instanceResource = resolver.getResource(jobInstanceRoot, "${instanceId}")
 
         final properties = instanceResource.adaptTo(ValueMap)
-        final params = properties[JcrJobInstanceDao.PARAMETERS] as String[]
+        final params = properties[JcrGrabbitJobInstanceDao.PARAMETERS] as String[]
 
         final paramsMap = params?.collectEntries { String entry ->
             final pair = entry.split("=")
@@ -365,7 +365,7 @@ class JcrJobExecutionDao extends AbstractJcrDao implements GrabbitJobExecutionDa
     }
 
     /**
-     * Must be called when a new instance of JcrJobExecutionDao is created.
+     * Must be called when a new instance of JcrGrabbitJobExecutionDao is created.
      * Ensures that {@link #JOB_EXECUTION_ROOT} exists on initialization
      */
     @Override
