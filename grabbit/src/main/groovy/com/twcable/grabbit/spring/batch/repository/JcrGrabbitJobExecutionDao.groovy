@@ -392,7 +392,7 @@ class JcrGrabbitJobExecutionDao extends AbstractJcrDao implements GrabbitJobExec
                     .toList()
                     .collect { it.path }
                     .unique() as List<String>
-            log.info "JobExecutions: $jobExecutions, size: ${jobExecutions.size()}"
+            log.debug "JobExecutions: $jobExecutions, size: ${jobExecutions.size()}"
             return jobExecutions
         }
 
@@ -415,7 +415,7 @@ class JcrGrabbitJobExecutionDao extends AbstractJcrDao implements GrabbitJobExec
                 Date endTimeDate = DateUtil.getDateFromISOString(dateInIsoString)
                 olderThanHours.time.compareTo(endTimeDate) > 0
             } as List<String>
-            log.info "JobExecutionsOlder than ${hours} hours: $olderResourcePaths , length: ${olderResourcePaths.size()}"
+            log.debug "JobExecutionsOlder than ${hours} hours: $olderResourcePaths , length: ${olderResourcePaths.size()}"
             return olderResourcePaths
 
         }

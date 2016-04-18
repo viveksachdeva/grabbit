@@ -51,12 +51,12 @@ class DefaultCleanJobRepository implements CleanJobRepository {
     }
 
     @Override
-    void cleanJobRepository(int hours) {
+    List<String> cleanJobRepository(int hours) {
         JcrJobRepositoryFactoryBean jobRepositoryFactoryBean = configurableApplicationContext.getBean(JcrJobRepositoryFactoryBean)
 
         if(!jobRepositoryFactoryBean) {
             log.error "Cannot get an instance of JcrJobRepositoryFactoryBean. Will not clean up Grabbit Jcr Job Repository"
-            return
+            return []
         }
 
         List<String> jobExecutionPaths = jobRepositoryFactoryBean.jobExecutionDao.getJobExecutions([BatchStatus.FAILED, BatchStatus.COMPLETED])
@@ -69,6 +69,7 @@ class DefaultCleanJobRepository implements CleanJobRepository {
         JcrUtil.manageResourceResolver(resourceResolverFactory) { ResourceResolver resolver ->
 
             log.debug "jobInstancesToRemove: $jobInstancesToRemove, size: ${jobInstancesToRemove.size()}"
+            log.debug "jobExecutionsToRemove: $olderThanHoursJobExecutions, size: ${olderThanHoursJobExecutions.size()}"
             log.debug "stepExecutionsToRemove: $stepExecutionsToRemove, size: ${stepExecutionsToRemove.size()}"
             log.debug "jobExecutionContextsToRemove: $jobExecutionContextsToRemove, size: ${jobExecutionContextsToRemove.size()}"
             log.debug "stepExecutionContextsToResource: $stepExecutionContextsToRemove, size: ${stepExecutionContextsToRemove.size()}"
@@ -84,6 +85,9 @@ class DefaultCleanJobRepository implements CleanJobRepository {
             log.info "Removing ${stepExecutionContextsToRemove.size()} StepExecutionContexts"
             removeResources(stepExecutionContextsToRemove, resolver)
         }
+
+        List<String> removedJobExecutionIds = olderThanHoursJobExecutions.collect { it.split("/").last() }
+        return removedJobExecutionIds
     }
 
     private void removeResources(List<String> resourcePathsToRemove, ResourceResolver resolver) {

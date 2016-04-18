@@ -21,7 +21,8 @@ interface CleanJobRepository {
     /**
      * This API is used to clean Grabbit's JCR Job Repository. It removes all job executions and all associated
      * job instances etc. that are @param hours older than NOW (time when this API is called)
+     * @return list of JobExecutionIds that were removed
      */
-    public void cleanJobRepository(int hours)
+    public List<String> cleanJobRepository(int hours)
 
 }
