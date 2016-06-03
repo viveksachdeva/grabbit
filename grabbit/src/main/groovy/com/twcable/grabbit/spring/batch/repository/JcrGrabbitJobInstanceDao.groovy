@@ -264,9 +264,9 @@ class JcrGrabbitJobInstanceDao extends AbstractJcrDao implements GrabbitJobInsta
     }
 
     @Override
-    List<String> getJobInstancePaths(List<String> jobExecutionResourcePaths) {
+    Collection<String> getJobInstancePaths(Collection<String> jobExecutionResourcePaths) {
         JcrUtil.manageResourceResolver(resourceResolverFactory) { ResourceResolver resolver ->
-            List<String> jobInstancesToRemove = []
+            Collection<String> jobInstancesToRemove = []
             jobExecutionResourcePaths.each { String jobExecutionResourcePath ->
                 Resource jobExecutionResource = resolver.getResource(jobExecutionResourcePath)
                 ValueMap props = jobExecutionResource.adaptTo(ValueMap)

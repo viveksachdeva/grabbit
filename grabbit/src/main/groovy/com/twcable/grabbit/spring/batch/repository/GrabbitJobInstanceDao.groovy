@@ -29,6 +29,6 @@ interface GrabbitJobInstanceDao extends JobInstanceDao {
      * Returns job instance paths by comparing "id" property on "jobInstances" with
      * "instanceId" property on JobExecutions for the @param jobExecutionResourcePaths
      */
-    public List<String> getJobInstancePaths(List<String> jobExecutionResourcePaths)
+    public Collection<String> getJobInstancePaths(Collection<String> jobExecutionResourcePaths)
 
 }

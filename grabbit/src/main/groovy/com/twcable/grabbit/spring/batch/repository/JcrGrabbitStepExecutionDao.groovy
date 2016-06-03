@@ -300,9 +300,9 @@ public class JcrGrabbitStepExecutionDao extends AbstractJcrDao implements Grabbi
     }
 
     @Override
-    List<String> getStepExecutionPaths(List<String> jobExecutionResourcePaths) {
+    Collection<String> getStepExecutionPaths(Collection<String> jobExecutionResourcePaths) {
         JcrUtil.manageResourceResolver(resourceResolverFactory) { ResourceResolver resolver ->
-            List<String> stepExecutionsToRemove = []
+            Collection<String> stepExecutionsToRemove = []
             jobExecutionResourcePaths.each { String jobExecutionResourcePath ->
                 Resource jobExecutionResource = resolver.getResource(jobExecutionResourcePath)
                 ValueMap props = jobExecutionResource.adaptTo(ValueMap)
@@ -319,7 +319,7 @@ public class JcrGrabbitStepExecutionDao extends AbstractJcrDao implements Grabbi
             //There are 2 versions of Resources returned back by findResources
             //One for JcrNodeResource and one for SocialResourceWrapper
             //Hence, duplicates need to be removed
-            return stepExecutionsToRemove.unique() as List<String>
+            return stepExecutionsToRemove.unique() as Collection<String>
         }
     }
 }

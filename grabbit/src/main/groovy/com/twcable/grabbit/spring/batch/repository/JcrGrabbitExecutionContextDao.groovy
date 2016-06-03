@@ -306,9 +306,9 @@ class JcrGrabbitExecutionContextDao extends AbstractJcrDao implements GrabbitExe
     }
 
     @Override
-    List<String> getJobExecutionContextPaths(List<String> jobExecutionResourcePaths) {
+    Collection<String> getJobExecutionContextPaths(Collection<String> jobExecutionResourcePaths) {
         JcrUtil.manageResourceResolver(resourceResolverFactory) { ResourceResolver resolver ->
-            List<String> jobExecutionContextPathsToRemove = []
+            Collection<String> jobExecutionContextPathsToRemove = []
             jobExecutionResourcePaths.each { String jobExecutionResourcePath ->
                 Resource jobExecutionResource = resolver.getResource(jobExecutionResourcePath)
                 ValueMap props = jobExecutionResource.adaptTo(ValueMap)
@@ -326,14 +326,14 @@ class JcrGrabbitExecutionContextDao extends AbstractJcrDao implements GrabbitExe
             //There are 2 versions of Resources returned back by findResources
             //One for JcrNodeResource and one for SocialResourceWrapper
             //Hence, duplicates need to be removed
-            return jobExecutionContextPathsToRemove.unique() as List<String>
+            return jobExecutionContextPathsToRemove.unique() as Collection<String>
         }
     }
 
     @Override
-    List<String> getStepExecutionContextPaths(List<String> stepExecutionResourcePaths) {
+    Collection<String> getStepExecutionContextPaths(Collection<String> stepExecutionResourcePaths) {
         JcrUtil.manageResourceResolver(resourceResolverFactory) { ResourceResolver resolver ->
-            List<String> stepExecutionContextPathsToRemove = []
+            Collection<String> stepExecutionContextPathsToRemove = []
             stepExecutionResourcePaths.each { String stepExecutionResourcePath ->
                 Resource stepExecutionResource = resolver.getResource(stepExecutionResourcePath)
                 ValueMap props = stepExecutionResource.adaptTo(ValueMap)
@@ -350,7 +350,7 @@ class JcrGrabbitExecutionContextDao extends AbstractJcrDao implements GrabbitExe
             //There are 2 versions of Resources returned back by findResources
             //One for JcrNodeResource and one for SocialResourceWrapper
             //Hence, duplicates need to be removed
-            return stepExecutionContextPathsToRemove.unique() as List<String>
+            return stepExecutionContextPathsToRemove.unique() as Collection<String>
 
         }
 

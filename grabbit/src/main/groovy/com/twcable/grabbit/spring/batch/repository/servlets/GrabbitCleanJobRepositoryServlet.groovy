@@ -52,7 +52,7 @@ class GrabbitCleanJobRepositoryServlet extends SlingAllMethodsServlet {
             return
         }
         int hours = hoursParam.toInteger()
-        List<String> removedJobExecutions = cleanJobRepository.cleanJobRepository(hours)
+        Collection<String> removedJobExecutions = cleanJobRepository.cleanJobRepository(hours)
         response.status = HttpServletResponse.SC_OK
         response.writer.write ("JobExecutions and the corresponding JobInstances, StepExecutions and ExecutionContexts " +
                 "were removed. JobExecutionsIds that were removed: ${removedJobExecutions}")

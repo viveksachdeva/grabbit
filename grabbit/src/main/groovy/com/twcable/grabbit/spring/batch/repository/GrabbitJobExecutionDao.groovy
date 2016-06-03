@@ -29,11 +29,11 @@ interface GrabbitJobExecutionDao extends JobExecutionDao{
     /**
      * Returns job execution paths for given BatchStatuses
      */
-    public List<String> getJobExecutions(List<BatchStatus> batchStatuses)
+    public Collection<String> getJobExecutions(Collection<BatchStatus> batchStatuses)
 
     /**
      * Returns job execution paths which ended @param hours ago from "Now"
      */
-    public List<String> getJobExecutions(int hours, List<String> jobExecutionPaths)
+    public Collection<String> getJobExecutions(int hours, Collection<String> jobExecutionPaths)
 
 }

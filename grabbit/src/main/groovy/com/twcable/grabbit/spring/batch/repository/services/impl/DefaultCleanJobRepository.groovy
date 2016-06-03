@@ -51,7 +51,7 @@ class DefaultCleanJobRepository implements CleanJobRepository {
     }
 
     @Override
-    List<String> cleanJobRepository(int hours) {
+    Collection<String> cleanJobRepository(int hours) {
         JcrJobRepositoryFactoryBean jobRepositoryFactoryBean = configurableApplicationContext.getBean(JcrJobRepositoryFactoryBean)
 
         if(!jobRepositoryFactoryBean) {
@@ -59,12 +59,12 @@ class DefaultCleanJobRepository implements CleanJobRepository {
             return []
         }
 
-        List<String> jobExecutionPaths = jobRepositoryFactoryBean.jobExecutionDao.getJobExecutions([BatchStatus.FAILED, BatchStatus.COMPLETED])
-        List<String> olderThanHoursJobExecutions = jobRepositoryFactoryBean.jobExecutionDao.getJobExecutions(hours, jobExecutionPaths)
-        List<String> jobInstancesToRemove = jobRepositoryFactoryBean.jobInstanceDao.getJobInstancePaths(olderThanHoursJobExecutions)
-        List<String> stepExecutionsToRemove = jobRepositoryFactoryBean.stepExecutionDao.getStepExecutionPaths(olderThanHoursJobExecutions)
-        List<String> jobExecutionContextsToRemove = jobRepositoryFactoryBean.executionContextDao.getJobExecutionContextPaths(olderThanHoursJobExecutions)
-        List<String> stepExecutionContextsToRemove = jobRepositoryFactoryBean.executionContextDao.getStepExecutionContextPaths(stepExecutionsToRemove)
+        Collection<String> jobExecutionPaths = jobRepositoryFactoryBean.jobExecutionDao.getJobExecutions([BatchStatus.FAILED, BatchStatus.COMPLETED])
+        Collection<String> olderThanHoursJobExecutions = jobRepositoryFactoryBean.jobExecutionDao.getJobExecutions(hours, jobExecutionPaths)
+        Collection<String> jobInstancesToRemove = jobRepositoryFactoryBean.jobInstanceDao.getJobInstancePaths(olderThanHoursJobExecutions)
+        Collection<String> stepExecutionsToRemove = jobRepositoryFactoryBean.stepExecutionDao.getStepExecutionPaths(olderThanHoursJobExecutions)
+        Collection<String> jobExecutionContextsToRemove = jobRepositoryFactoryBean.executionContextDao.getJobExecutionContextPaths(olderThanHoursJobExecutions)
+        Collection<String> stepExecutionContextsToRemove = jobRepositoryFactoryBean.executionContextDao.getStepExecutionContextPaths(stepExecutionsToRemove)
 
         JcrUtil.manageResourceResolver(resourceResolverFactory) { ResourceResolver resolver ->
 
@@ -86,11 +86,11 @@ class DefaultCleanJobRepository implements CleanJobRepository {
             removeResources(stepExecutionContextsToRemove, resolver)
         }
 
-        List<String> removedJobExecutionIds = olderThanHoursJobExecutions.collect { it.split("/").last() }
+        Collection<String> removedJobExecutionIds = olderThanHoursJobExecutions.collect { it.split("/").last() }
         return removedJobExecutionIds
     }
 
-    private void removeResources(List<String> resourcePathsToRemove, ResourceResolver resolver) {
+    private void removeResources(Collection<String> resourcePathsToRemove, ResourceResolver resolver) {
         try {
             resourcePathsToRemove.each {
                 Resource resourceToDelete = resolver.getResource(it)

@@ -29,5 +29,5 @@ interface GrabbitStepExecutionDao extends StepExecutionDao {
      * Returns step execution paths by comparing "jobExecutionId" property on "stepExecutions with
      * "executionId" property on JobExecutions for the @param jobExecutionResourcePaths
      */
-    public List<String> getStepExecutionPaths(List<String> jobExecutionResourcePaths)
+    public Collection<String> getStepExecutionPaths(Collection<String> jobExecutionResourcePaths)
 }
