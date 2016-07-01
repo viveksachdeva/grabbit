@@ -1,0 +1,54 @@
+= Grabbit
+:toc:
+:toc-placement!:
+
+toc::[]
+
+:imagesDir: assets
+
+image:https://travis-ci.org/TWCable/grabbit.svg?branch=master[title = "Build Status", link = "https://travis-ci.org/TWCable/grabbit"] image:https://badge.waffle.io/TWCable/grabbit.png?label=ready&title=Ready[title = "Stories in Ready", link = "https://waffle.io/TWCable/grabbit"]
+
+image:https://api.bintray.com/packages/twcable/aem/Grabbit/images/download.svg[title = "Download", link = "https://bintray.com/twcable/aem/Grabbit/_latestVersion"]
+
+
+== Purpose
+include::docs/Purpose.adoc[]
+
+== AEM Support
+include::docs/AEM_Support.adoc[]
+
+== Runtime Dependencies
+include::docs/Dependencies.adoc[]
+
+== Building From Source
+
+=== Full Clean Build & Install
+`gradlew clean build install refreshAllBundles`
+
+=== Pre-requisites
+include::docs/Prerequisites.adoc[]
+
+== Running Grabbit
+link:grabbit.sh[This] shell script can be used to initiate new Grabbit jobs, or monitor existing jobs.
+include::docs/Running.adoc[]
+
+== Monitoring / Validating the Content Sync
+include::docs/Monitoring.adoc[]
+
+== Cleaning Grabbit Job Repository
+include::docs/Cleaning.adoc[]
+
+== General Layout
+There are two primary components to Grabbit: a client and a server that run in the two CQ instances that you want to copy to and from (respectively).
+
+A recommended systems layout style is to have all content from a production publisher copied down to a staging "data warehouse" (DW) server to which all lower environments (beta, continuous integration, developer workstations, etc.) will connect. This way minimal load is placed on Production, and additional DW machines can be added to scale out if needed, each of which can grab from the "main" DW.
+The client sends an HTTP GET request with a content path and "last grab time" to the server and receives a protobuf stream of all the content below it that has changed. The client's BasicAuth credentials are used to create the JCR Session, so the client can never see content they don't have explicit access to. There are a number of ways to tune how the client works, including specifying multiple focused paths, parallel or serial execution, JCR Session batch size (the number of nodes to cache before flushing to disk), etc.
+
+== Releasing
+For the Grabbit developers, link:docs/RELEASING.adoc[instructions for releasing a new version of Grabbit].
+
+== Library Attribution
+include::docs/LibraryAttribution.adoc[]
+
+== LICENSE
+include::docs/LicenseInfo.adoc[]
