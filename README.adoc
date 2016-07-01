@@ -5,6 +5,7 @@
 toc::[]
 
 :imagesDir: assets
+:docsDir: docs
 
 image:https://travis-ci.org/TWCable/grabbit.svg?branch=master[title = "Build Status", link = "https://travis-ci.org/TWCable/grabbit"] image:https://badge.waffle.io/TWCable/grabbit.png?label=ready&title=Ready[title = "Stories in Ready", link = "https://waffle.io/TWCable/grabbit"]
 
@@ -12,13 +13,13 @@ image:https://api.bintray.com/packages/twcable/aem/Grabbit/images/download.svg[t
 
 
 == Purpose
-include::docs/Purpose.adoc[]
+include::{docsDir}/Purpose.adoc[]
 
 == AEM Support
-include::docs/AEM_Support.adoc[]
+include::{docsDir}/AEMSupport.adoc[]
 
 == Runtime Dependencies
-include::docs/Dependencies.adoc[]
+include::{docsDir}/Dependencies.adoc[]
 
 == Building From Source
 
@@ -26,17 +27,17 @@ include::docs/Dependencies.adoc[]
 `gradlew clean build install refreshAllBundles`
 
 === Pre-requisites
-include::docs/Prerequisites.adoc[]
+include::{docsDir}/Prerequisites.adoc[]
 
 == Running Grabbit
 link:grabbit.sh[This] shell script can be used to initiate new Grabbit jobs, or monitor existing jobs.
-include::docs/Running.adoc[]
+include::{docsDir}/Running.adoc[]
 
 == Monitoring / Validating the Content Sync
-include::docs/Monitoring.adoc[]
+include::{docsDir}/Monitoring.adoc[]
 
 == Cleaning Grabbit Job Repository
-include::docs/Cleaning.adoc[]
+include::{docsDir}/Cleaning.adoc[]
 
 == General Layout
 There are two primary components to Grabbit: a client and a server that run in the two CQ instances that you want to copy to and from (respectively).
@@ -45,10 +46,10 @@ A recommended systems layout style is to have all content from a production publ
 The client sends an HTTP GET request with a content path and "last grab time" to the server and receives a protobuf stream of all the content below it that has changed. The client's BasicAuth credentials are used to create the JCR Session, so the client can never see content they don't have explicit access to. There are a number of ways to tune how the client works, including specifying multiple focused paths, parallel or serial execution, JCR Session batch size (the number of nodes to cache before flushing to disk), etc.
 
 == Releasing
-For the Grabbit developers, link:docs/RELEASING.adoc[instructions for releasing a new version of Grabbit].
+For the Grabbit developers, link:{docsDir}/RELEASING.adoc[instructions for releasing a new version of Grabbit].
 
 == Library Attribution
-include::docs/LibraryAttribution.adoc[]
+include::{docsDir}/LibraryAttribution.adoc[]
 
 == LICENSE
-include::docs/LicenseInfo.adoc[]
+include::{docsDir}/LicenseInfo.adoc[]
