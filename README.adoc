@@ -13,12 +13,15 @@ image:https://api.bintray.com/packages/twcable/aem/Grabbit/images/download.svg[t
 
 
 == Purpose
+
 include::{docsDir}/Purpose.adoc[]
 
 == AEM Support
+
 include::{docsDir}/AEMSupport.adoc[]
 
 == Runtime Dependencies
+
 include::{docsDir}/Dependencies.adoc[]
 
 == Building From Source
@@ -27,16 +30,20 @@ include::{docsDir}/Dependencies.adoc[]
 `gradlew clean build install refreshAllBundles`
 
 === Pre-requisites
+
 include::{docsDir}/Prerequisites.adoc[]
 
 == Running Grabbit
 link:grabbit.sh[This] shell script can be used to initiate new Grabbit jobs, or monitor existing jobs.
+
 include::{docsDir}/Running.adoc[]
 
 == Monitoring / Validating the Content Sync
+
 include::{docsDir}/Monitoring.adoc[]
 
 == Cleaning Grabbit Job Repository
+
 include::{docsDir}/Cleaning.adoc[]
 
 == General Layout
@@ -49,7 +56,9 @@ The client sends an HTTP GET request with a content path and "last grab time" to
 For the Grabbit developers, link:{docsDir}/RELEASING.adoc[instructions for releasing a new version of Grabbit].
 
 == Library Attribution
+
 include::{docsDir}/LibraryAttribution.adoc[]
 
 == LICENSE
+
 include::{docsDir}/LicenseInfo.adoc[]
