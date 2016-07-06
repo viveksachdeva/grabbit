@@ -49,7 +49,7 @@ include::{docsDir}/Cleaning.adoc[]
 
 include::{docsDir}/GeneralLayout.adoc[]
 
-== link:{docsDir}/RELEASING.adoc[Releasing New Version]
+== link:{docsDir}/RELEASING.adoc[Releasing A New Version]
 
 include::{docsDir}/RELEASING.adoc[]
 
@@ -57,6 +57,6 @@ include::{docsDir}/RELEASING.adoc[]
 
 include::{docsDir}/LibraryAttribution.adoc[]
 
-== {docsDir}/LicenseInfo.adoc[LICENSE]
+== link:{docsDir}/LicenseInfo.adoc[LICENSE]
 
 include::{docsDir}/LicenseInfo.adoc[]
