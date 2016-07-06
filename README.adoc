@@ -16,11 +16,11 @@ image:https://api.bintray.com/packages/twcable/aem/Grabbit/images/download.svg[t
 
 include::{docsDir}/Purpose.adoc[]
 
-== AEM Support
+== link:{docsDir}/AEMSupport.adoc[AEM Support]
 
 include::{docsDir}/AEMSupport.adoc[]
 
-== Runtime Dependencies
+== link:{docsDir}/Dependencies.adoc[Runtime Dependencies]
 
 include::{docsDir}/Dependencies.adoc[]
 
@@ -29,36 +29,34 @@ include::{docsDir}/Dependencies.adoc[]
 === Full Clean Build & Install
 `gradlew clean build install refreshAllBundles`
 
-=== Pre-requisites
+=== link:{docsDir}/Prerequisites.adoc[Pre-requisites]
 
 include::{docsDir}/Prerequisites.adoc[]
 
-== Running Grabbit
-link:grabbit.sh[This] shell script can be used to initiate new Grabbit jobs, or monitor existing jobs.
+== link:{docsDir}/Running.adoc[Running Grabbit]
 
 include::{docsDir}/Running.adoc[]
 
-== Monitoring / Validating the Content Sync
+== link:{docsDir}/Monitoring.adoc[Monitoring / Validating the Content Sync]
 
 include::{docsDir}/Monitoring.adoc[]
 
-== Cleaning Grabbit Job Repository
+== link:{docsDir}/Cleaning.adoc[Cleaning Grabbit Job Repository]
 
 include::{docsDir}/Cleaning.adoc[]
 
-== General Layout
-There are two primary components to Grabbit: a client and a server that run in the two CQ instances that you want to copy to and from (respectively).
+== link:{docsDir}/GeneralLayout.adoc[General Layout]
 
-A recommended systems layout style is to have all content from a production publisher copied down to a staging "data warehouse" (DW) server to which all lower environments (beta, continuous integration, developer workstations, etc.) will connect. This way minimal load is placed on Production, and additional DW machines can be added to scale out if needed, each of which can grab from the "main" DW.
-The client sends an HTTP GET request with a content path and "last grab time" to the server and receives a protobuf stream of all the content below it that has changed. The client's BasicAuth credentials are used to create the JCR Session, so the client can never see content they don't have explicit access to. There are a number of ways to tune how the client works, including specifying multiple focused paths, parallel or serial execution, JCR Session batch size (the number of nodes to cache before flushing to disk), etc.
+include::{docsDir}/GeneralLayout.adoc[]
 
-== Releasing
-For the Grabbit developers, link:{docsDir}/RELEASING.adoc[instructions for releasing a new version of Grabbit].
+== link:{docsDir}/RELEASING.adoc[Releasing New Version]
 
-== Library Attribution
+include::{docsDir}/RELEASING.adoc[]
+
+== link:{docsDir}/LibraryAttribution.adoc[Library Attribution]
 
 include::{docsDir}/LibraryAttribution.adoc[]
 
-== LICENSE
+== {docsDir}/LicenseInfo.adoc[LICENSE]
 
 include::{docsDir}/LicenseInfo.adoc[]

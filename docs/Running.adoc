@@ -1,3 +1,5 @@
+link:../grabbit.sh[This] shell script can be used to initiate new Grabbit jobs, or monitor existing jobs.
+
 === Getting Started With grabbit.sh
 
 - Run grabbit.sh
