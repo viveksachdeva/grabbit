@@ -12,7 +12,7 @@ image:https://travis-ci.org/TWCable/grabbit.svg?branch=master[title = "Build Sta
 image:https://api.bintray.com/packages/twcable/aem/Grabbit/images/download.svg[title = "Download", link = "https://bintray.com/twcable/aem/Grabbit/_latestVersion"]
 
 
-== Purpose
+== link:{docsDir}/Purpose.adoc[Purpose]
 
 include::{docsDir}/Purpose.adoc[]
 
