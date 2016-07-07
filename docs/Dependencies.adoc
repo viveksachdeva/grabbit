@@ -1,2 +1,0 @@
-* AEM/CQ
-* To run Grabbit in your AEM/CQ instance, **you need to install a Fragment Bundle once per instance. It can be found link:https://bintray.com/artifact/download/twcable/aem/dependencies/Sun-Misc-Fragment-Bundle-1.0.0.zip[here]**

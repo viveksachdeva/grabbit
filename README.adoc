@@ -1,62 +1,34 @@
 = Grabbit
-:toc:
-:toc-placement!:
 
-toc::[]
-
-:imagesDir: assets
 :docsDir: docs
 
 image:https://travis-ci.org/TWCable/grabbit.svg?branch=master[title = "Build Status", link = "https://travis-ci.org/TWCable/grabbit"] image:https://badge.waffle.io/TWCable/grabbit.png?label=ready&title=Ready[title = "Stories in Ready", link = "https://waffle.io/TWCable/grabbit"]
 
 image:https://api.bintray.com/packages/twcable/aem/Grabbit/images/download.svg[title = "Download", link = "https://bintray.com/twcable/aem/Grabbit/_latestVersion"]
 
+== Table of Contents
 
-== link:{docsDir}/Purpose.adoc[Purpose]
+* link:{docsDir}/Purpose.adoc[Project Purpose]
 
-include::{docsDir}/Purpose.adoc[]
+* Directory
 
-== link:{docsDir}/AEMSupport.adoc[AEM Support]
+** Installing Grabbit
 
-include::{docsDir}/AEMSupport.adoc[]
+*** link:{docsDir}/RELEASE_NOTES.md[Releases]
+*** link:{docsDir}/AEMSupport.adoc[Dependencies & Version Support]
 
-== link:{docsDir}/Dependencies.adoc[Runtime Dependencies]
+** Using Grabbit
 
-include::{docsDir}/Dependencies.adoc[]
+*** link:{docsDir}/GeneralLayout.adoc[General Layout]
+*** link:{docsDir}/Prerequisites.adoc[Setup]
+*** link:{docsDir}/Running.adoc[Running]
+*** link:{docsDir}/Monitoring.adoc[Monitoring / Validating the Content Sync]
+*** link:{docsDir}/Cleaning.adoc[Cleaning Grabbit Job Repository]
 
-== Building From Source
+** Contributing
 
-=== Full Clean Build & Install
-`gradlew clean build install refreshAllBundles`
+*** link:{docsDir}/RELEASING.adoc[Releasing A New Version]
 
-=== link:{docsDir}/Prerequisites.adoc[Pre-requisites]
+** link:{docsDir}/LibraryAttribution.adoc[Library Attribution]
 
-include::{docsDir}/Prerequisites.adoc[]
-
-== link:{docsDir}/Running.adoc[Running Grabbit]
-
-include::{docsDir}/Running.adoc[]
-
-== link:{docsDir}/Monitoring.adoc[Monitoring / Validating the Content Sync]
-
-include::{docsDir}/Monitoring.adoc[]
-
-== link:{docsDir}/Cleaning.adoc[Cleaning Grabbit Job Repository]
-
-include::{docsDir}/Cleaning.adoc[]
-
-== link:{docsDir}/GeneralLayout.adoc[General Layout]
-
-include::{docsDir}/GeneralLayout.adoc[]
-
-== link:{docsDir}/RELEASING.adoc[Releasing A New Version]
-
-include::{docsDir}/RELEASING.adoc[]
-
-== link:{docsDir}/LibraryAttribution.adoc[Library Attribution]
-
-include::{docsDir}/LibraryAttribution.adoc[]
-
-== link:{docsDir}/LicenseInfo.adoc[LICENSE]
-
-include::{docsDir}/LicenseInfo.adoc[]
+** link:{docsDir}/LicenseInfo.adoc[License]
