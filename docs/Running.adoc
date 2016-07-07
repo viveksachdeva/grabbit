@@ -2,15 +2,14 @@
 
 `gradlew clean build install refreshAllBundles`
 
-link:../grabbit.sh[This] shell script can be used to initiate new Grabbit jobs, or monitor existing jobs.
-
 === Getting Started With grabbit.sh
+
+link:../grabbit.sh[This] shell script can be used to initiate new Grabbit jobs, or monitor existing jobs.
 
 - Run grabbit.sh
 - Enter connection details to your Grabbit "client" server (The server you wish to pull content into)
 
 image::../assets/grabbitConnection.png[Grabbit Connection Example]
-
 
 === Creating a New Job Request
 
