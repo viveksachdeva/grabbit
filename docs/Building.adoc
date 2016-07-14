@@ -1,0 +1,4 @@
+== Building From Source
+
+* Once you have cloned this project, run this command to build and upload the package to your AEM instance
+`gradlew clean build install refreshAllBundles`

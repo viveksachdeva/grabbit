@@ -1,6 +1,4 @@
-=== Building From Source
-
-`gradlew clean build install refreshAllBundles`
+Make sure Grabbit Package is installed on both client and server. You can get release information from link:RELEASE_NOTES.md[here]
 
 === Getting Started With grabbit.sh
 
