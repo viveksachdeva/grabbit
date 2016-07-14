@@ -1,4 +1,4 @@
-Make sure Grabbit Package is installed on both client and server. You can get release information from link:RELEASE_NOTES.md[here]
+Make sure Grabbit Package is installed on both client and server. You can get release information from link:https://bintray.com/twcable/aem/Grabbit/_latestVersion[here]
 
 === Getting Started With grabbit.sh
 
