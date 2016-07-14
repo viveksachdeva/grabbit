@@ -1,3 +1,5 @@
+== Monitoring/Validation Content Sync
+
 You may choose to use grabbit.sh to monitor your sync, or you can validate/monitor your sync by going to the following URIs:
 
 `/grabbit/job/<jobId>`

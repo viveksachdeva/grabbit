@@ -1,3 +1,5 @@
+== Cleaning Grabbit Job Repository
+
 Over time, the link:grabbit/src/main/groovy/com/twcable/grabbit/spring/batch/repository[Grabbit Job Repository] which is stored under `/var/grabbit` grows and without pruning the data that it is storing, the performance of the Grabbit Status API degrades slowly.
 In order to manage that, there is a `Clean Repository` API available that allows you to delete any Grabbit job history that is older than `X` hours from the time the API was hit.
 

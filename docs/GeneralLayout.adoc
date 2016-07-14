@@ -1,3 +1,5 @@
+== General Layout
+
 There are two primary components to Grabbit: a client and a server that run in the two CQ instances that you want to copy to and from (respectively).
 
 A recommended systems layout style is to have all content from a production publisher copied down to a staging "data warehouse" (DW) server to which all lower environments (beta, continuous integration, developer workstations, etc.) will connect. This way minimal load is placed on Production, and additional DW machines can be added to scale out if needed, each of which can grab from the "main" DW.

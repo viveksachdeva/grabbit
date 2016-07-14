@@ -1,8 +1,10 @@
-==== Installing Protocol Buffers Compiler
-===== For Windows
+== Prerequisites
+
+=== Installing Protocol Buffers Compiler
+==== For Windows
 Install the binary from https://github.com/google/protobuf/releases/download/v2.4.1/protoc-2.4.1-win32.zip and then set the `/path/to/protoc/parent` on your PATH variable.
 
-===== For Macs
+==== For Macs
 
 ```
 
