@@ -22,7 +22,7 @@ Moreover, by doing a continuous stream, we avoid the latency issues. Depending o
 
 == Table of Contents
 
-* Installing Grabbit
+* General Information
 
 ** link:{docsDir}/RELEASE_NOTES.md[Releases]
 ** link:{docsDir}/AEMSupport.adoc[Dependencies & Version Support]
