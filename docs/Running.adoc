@@ -3,8 +3,8 @@
 Make sure Grabbit Package is installed on both client and server. You can download the package from link:https://bintray.com/twcable/aem/Grabbit/_latestVersion#files[here]
 
 Once that is done, you need just 2 files to sync content between the servers:
-1. link:../grabbit.sh[grabbit.sh]
-2. link:../sample_config.json[config.json] or link:../sample_config.yaml[config.yaml]
+* link:../grabbit.sh[grabbit.sh]
+* link:../sample-config.json[config.json] or link:../sample_config.yaml[config.yaml]
 
 === Getting Started With grabbit.sh
 
