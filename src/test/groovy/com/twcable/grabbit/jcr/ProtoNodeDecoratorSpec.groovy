@@ -40,6 +40,8 @@ import spock.lang.Specification
 
 import javax.jcr.Node
 import javax.jcr.Session
+import javax.jcr.Workspace
+import javax.jcr.version.VersionManager
 
 import static javax.jcr.PropertyType.STRING
 import static org.apache.jackrabbit.JcrConstants.JCR_MIXINTYPES
@@ -132,13 +134,21 @@ class ProtoNodeDecoratorSpec extends Specification {
         properties[0].value.stringValue == "somevalue"
     }
 
-
     def "Can write the decorated node to the JCR"() {
         given:
-        final session = Mock(Session)
+        final session = Mock(Session) {
+            getWorkspace() >> {
+                Mock(Workspace) {
+                    getVersionManager() >> {
+                        Mock(VersionManager)
+                    }
+                }
+            }
+        }
         final node = Mock(Node) {
             canAddMixin("somemixintype") >> { true }
             canAddMixin("unwritablemixin") >> { false }
+            isCheckedOut() >> {false}
         }
 
         final protoNodeDecorator = Spy(ProtoNodeDecorator, constructorArgs: [decoratedProtoNode]) {
