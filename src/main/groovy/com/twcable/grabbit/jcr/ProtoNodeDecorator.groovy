@@ -65,7 +65,7 @@ class ProtoNodeDecorator {
         //Write mixin types first to avoid InvalidConstraintExceptions
         final mixinProperty = getMixinProperty()
         if(mixinProperty) {
-            addMixins(mixinProperty, jcrNode, session)
+            addMixins(mixinProperty, jcrNode)
         }
         //Then add other properties
         writableProperties.each { it.writeToNode(jcrNode) }
@@ -90,24 +90,18 @@ class ProtoNodeDecorator {
      * @param property
      * @param node
      */
-    private static void addMixins(ProtoPropertyDecorator property, JCRNode node, Session session) {
+    private static void addMixins(ProtoPropertyDecorator property, JCRNode node) {
         property.values.valueList.each { ProtoValue value ->
-            try{
-                if(!node.isCheckedOut()){
-                    session.getWorkspace().getVersionManager().checkout(node.path)
-                }
-                if (node.canAddMixin(value.stringValue)) {
-                    node.addMixin(value.stringValue)
-                    log.debug "Added mixin ${value.stringValue} for : ${node.name}."
-                }
-                else {
-                    log.warn "Encountered invalid mixin type while unmarshalling for Proto value : ${value}"
-                }
+            JCRNodeDecorator jcrNodeDecorator = new JCRNodeDecorator(node)
+            jcrNodeDecorator.checkoutIfNecessary(node);
+            if (node.canAddMixin(value.stringValue)) {
+                node.addMixin(value.stringValue)
+                log.debug "Added mixin ${value.stringValue} for : ${node.name}."
+            } else {
+                log.warn "Encountered invalid mixin type while unmarshalling for Proto value : ${value}"
             }
-            catch (Exception exception){
-                log.warn "Unable to checkout node ${node.path} exception ${exception.message}"
-            }
+
         }
     }
 
-}
+   }

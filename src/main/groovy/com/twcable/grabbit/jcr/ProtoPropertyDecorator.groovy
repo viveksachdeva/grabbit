@@ -45,6 +45,8 @@ class ProtoPropertyDecorator {
 
     void writeToNode(@Nonnull JCRNode node) {
         if(primaryType || mixinType) throw new IllegalStateException("Refuse to write jcr:primaryType or jcr:mixinType as normal properties.  These are not allowed")
+        JCRNodeDecorator jcrNode = new JCRNodeDecorator(node);
+        jcrNode.checkoutIfNecessary(node);
         try {
             if (multiple) {
                 node.setProperty(this.name, getPropertyValues(), this.type)

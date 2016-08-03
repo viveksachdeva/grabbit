@@ -24,7 +24,11 @@ import groovy.util.logging.Slf4j
 import org.apache.jackrabbit.value.DateValue
 
 import javax.annotation.Nonnull
+<<<<<<< e2f1587401462a04db42959dfda48bd0d1d9dc53
 import javax.annotation.Nullable
+=======
+import javax.jcr.ItemNotFoundException
+>>>>>>> checkoutnode if necessary
 import javax.jcr.Node as JCRNode
 import javax.jcr.Property
 import javax.jcr.Property as JcrProperty
@@ -109,6 +113,7 @@ class JcrNodeDecorator {
         return definition.isMandatory()
     }
 
+<<<<<<< e2f1587401462a04db42959dfda48bd0d1d9dc53
     /**
      * Build node and "only" mandatory child nodes
      */
@@ -155,6 +160,39 @@ class JcrNodeDecorator {
         return null
     }
 
+=======
+    void checkoutIfNecessary(javax.jcr.Node node) throws RepositoryException {
+        try{
+            javax.jcr.Node versionableNode = findVersionableAncestor(node);
+            if (versionableNode != null) {
+                if (!versionableNode.isCheckedOut()) {
+                    versionableNode.checkout();
+                }
+            }
+        }
+        catch (Exception exception){
+            log.warn "Could not checkout node ${node.path}"
+        }
+
+    }
+
+    private javax.jcr.Node findVersionableAncestor(javax.jcr.Node node) throws RepositoryException {
+        if (isVersionable(node)) {
+            return node;
+        }
+        try {
+            node = node.getParent();
+            return findVersionableAncestor(node);
+        } catch (ItemNotFoundException e) {
+            // top-level
+            return null;
+        }
+    }
+
+    private boolean isVersionable(javax.jcr.Node node) throws RepositoryException {
+        return node.isNodeType("mix:versionable");
+    }
+>>>>>>> checkoutnode if necessary
 
     Object asType(Class clazz) {
         if(clazz == JCRNode) {

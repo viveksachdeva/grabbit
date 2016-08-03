@@ -1,0 +1,13 @@
+{
+serverUsername: "admin",
+serverPassword: "<password>",
+serverHost: "omega-pub1-beta3.nce.mcportals.webapps.rr.com:4503",
+serverPort: "4503",
+batchSize: 150,
+deltaContent: true,
+pathConfigurations: [
+{
+path: "/content/twc",
+}
+]
+}
